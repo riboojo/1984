@@ -34,14 +34,20 @@ public class ButtonManager : MonoBehaviour
 
     void Start()
     {
-        SetCursorDefault();
+        ClearChoices();
+        //SetCursorDefault();
     }
 
     void Update()
     {
         if (conversationManager.areChoicesDisplayed())
         {
-            CheckMousePosition();
+            //CheckMousePosition();
+            CheckOptionsSelection();
+        }
+        else
+        {
+            //ClearChoices();
         }
     }
 
@@ -105,7 +111,7 @@ public class ButtonManager : MonoBehaviour
         }
     }
 
-    void ChechMouseClicked()
+    void CheckMouseClicked()
     {
         if (conversationManager.areChoicesDisplayed())
         {
@@ -126,5 +132,53 @@ public class ButtonManager : MonoBehaviour
     {
         cursorDefault.SetActive(false);
         cursorClicked.SetActive(true);
+    }
+
+    void CheckOptionsSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            buttonsBacks[0].enabled = true;
+            buttonsBacks[1].enabled = false;
+            buttonsBacks[2].enabled = false;
+            buttonsBacks[3].enabled = false;
+            
+            conversationManager.MakeChoice(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2))
+        {
+            buttonsBacks[0].enabled = false;
+            buttonsBacks[1].enabled = true;
+            buttonsBacks[2].enabled = false;
+            buttonsBacks[3].enabled = false;
+            
+            conversationManager.MakeChoice(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad3))
+        {
+            buttonsBacks[0].enabled = false;
+            buttonsBacks[1].enabled = false;
+            buttonsBacks[2].enabled = true;
+            buttonsBacks[3].enabled = false;
+            
+            conversationManager.MakeChoice(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad4))
+        {
+            buttonsBacks[0].enabled = false;
+            buttonsBacks[1].enabled = false;
+            buttonsBacks[2].enabled = false;
+            buttonsBacks[3].enabled = true;
+            
+            conversationManager.MakeChoice(3);
+        } else { /* Do nothing */ }
+    }
+
+    public void ClearChoices()
+    {
+        buttonsBacks[0].enabled = false;
+        buttonsBacks[1].enabled = false;
+        buttonsBacks[2].enabled = false;
+        buttonsBacks[3].enabled = false;
     }
 }

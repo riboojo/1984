@@ -9,6 +9,9 @@ public class ConversationManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI conversation;
 
+    [SerializeField]
+    ButtonManager buttons;
+
     private float timer;
     private int charIndex = 0;
 
@@ -21,6 +24,8 @@ public class ConversationManager : MonoBehaviour
 
     [SerializeField] private GameObject[] choices;
     private TextMeshProUGUI[] choicesText;
+
+    private bool spaceReleased = false;
 
     private void Start()
     {
@@ -43,12 +48,18 @@ public class ConversationManager : MonoBehaviour
     {
         if (charIndex != 0)
         {
+            if (Input.GetKeyUp(KeyCode.Space))
+            {
+                spaceReleased = true;
+            }
+
             AddText(newText);
         }
         else
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
+                spaceReleased = false;
                 ContinueStory();
             }
         }
@@ -67,22 +78,48 @@ public class ConversationManager : MonoBehaviour
     {
         if (newLine != null)
         {
+            if (spaceReleased && Input.GetKeyDown(KeyCode.Space))
+            {
+                AddAllText(newLine);
+            }
+            else
+            {
+                AddNewChar(newLine);
+            }
+        }
+    }
+
+    void AddAllText(string newText)
+    {
+        conversation.text = newText;
+
+        charIndex = 0;
+        timer = 0f;
+
+        DisplayChoices();
+    }
+
+    void AddNewChar(string newText)
+    {
+        if (newText != null)
+        {
             timer -= Time.deltaTime * 2;
             if (timer <= 0f)
             {
                 timer += 0.25f;
-                charIndex++;
-                conversation.text = newLine.Substring(0, charIndex);
 
-                if (charIndex >= newLine.Length)
+                charIndex++;
+                conversation.text = newText.Substring(0, charIndex);
+
+                if (charIndex >= newText.Length)
                 {
                     charIndex = 0;
                     timer = 0f;
-                    newLine = null;
 
                     DisplayChoices();
                 }
             }
+
         }
     }
 
@@ -96,6 +133,8 @@ public class ConversationManager : MonoBehaviour
             choices[index].gameObject.SetActive(true);
             choicesText[index].text = choice.text;
             index++;
+
+            buttons.ClearChoices();
         }
 
         for (int i = index; i < choices.Length; i++)
