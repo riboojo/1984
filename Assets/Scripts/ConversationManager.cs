@@ -145,8 +145,11 @@ public class ConversationManager : MonoBehaviour
 
     public void MakeChoice(int choiceIndex)
     {
-        script.ChooseChoiceIndex(choiceIndex);
-        ContinueStory();
+        if (-1 < choiceIndex)
+        {
+            script.ChooseChoiceIndex(choiceIndex);
+            ContinueStory();
+        }
     }
 
     public bool areChoicesDisplayed()

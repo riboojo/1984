@@ -10,18 +10,24 @@ public class CursorManager : MonoBehaviour
     private Camera screen;
     [SerializeField]
     private Transform[] delimiters; // x:9_19 y:-3.69_6.29
+    
+    private float sensitivity = 0.5f;
+    private Vector2 mouseTurn;
 
-    private float speed = 2f;
+    private bool isMouseCalibrated = false;
 
     void Awake()
     {
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
 
     void Update()
     {
-        MoveCursor();
+        if (isMouseCalibrated)
+        {
+            MoveCursor();
+        }
     }
 
     public bool IsCursorOnScreen()
@@ -37,21 +43,40 @@ public class CursorManager : MonoBehaviour
         return cursor.transform.position;
     }
 
+    public Vector3 GetMousePosition()
+    {
+        return mouseTurn;
+    }
+
+    public void MouseCalibrationDone()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        isMouseCalibrated = true;
+    }
+
     void MoveCursor()
     {
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, speed);
-        Vector3 newCursorPos = new Vector3(screen.ScreenToWorldPoint(mousePos).x, screen.ScreenToWorldPoint(mousePos).y, cursor.transform.position.z);
+        Vector3 newCursorPos = cursor.transform.position;
 
-        Vector3 curCursorPor = cursor.transform.position;
+        mouseTurn.x += Input.GetAxis("Mouse X") * sensitivity;
+        mouseTurn.y += Input.GetAxis("Mouse Y") * sensitivity;
+        
+        Vector3 currMousePos = new Vector3(mouseTurn.x, mouseTurn.y, cursor.transform.position.z);
 
-        if ((newCursorPos.x >= delimiters[0].position.x) && (newCursorPos.x <= delimiters[1].position.x))
+        if ((currMousePos.x >= delimiters[0].position.x) && (currMousePos.x <= delimiters[1].position.x))
         {
-            cursor.transform.position = new Vector3(newCursorPos.x, cursor.transform.position.y, cursor.transform.position.z);
+            newCursorPos.x = currMousePos.x;
+            Debug.Log("Inside X delimiter");
         }
 
-        if ((newCursorPos.y <= delimiters[2].position.y) && (newCursorPos.y >= delimiters[3].position.y))
+        if ((currMousePos.y <= delimiters[2].position.y) && (currMousePos.y >= delimiters[3].position.y))
         {
-            cursor.transform.position = new Vector3(cursor.transform.position.x, newCursorPos.y, cursor.transform.position.z);
+            newCursorPos.y = currMousePos.y;
+            Debug.Log("Inside Y delimiter");
         }
+
+        cursor.transform.position = newCursorPos;
     }
 }
