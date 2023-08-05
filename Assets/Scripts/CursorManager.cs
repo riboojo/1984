@@ -14,8 +14,8 @@ public class CursorManager : MonoBehaviour
     private float sensitivity = 0.5f;
     private Vector2 mouseTurn;
 
-    private bool isMouseCalibrated = false;
-
+    private bool canMove = false;
+    
     void Awake()
     {
         Cursor.lockState = CursorLockMode.None;
@@ -24,7 +24,7 @@ public class CursorManager : MonoBehaviour
 
     void Update()
     {
-        if (isMouseCalibrated)
+        if (canMove)
         {
             MoveCursor();
         }
@@ -48,12 +48,20 @@ public class CursorManager : MonoBehaviour
         return mouseTurn;
     }
 
-    public void MouseCalibrationDone()
+    public void SetCursorStatus(bool isActive)
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
-        isMouseCalibrated = true;
+        if (isActive)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            canMove = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            canMove = false;
+        }
     }
 
     void MoveCursor()
@@ -62,19 +70,19 @@ public class CursorManager : MonoBehaviour
 
         mouseTurn.x += Input.GetAxis("Mouse X") * sensitivity;
         mouseTurn.y += Input.GetAxis("Mouse Y") * sensitivity;
-        
+
         Vector3 currMousePos = new Vector3(mouseTurn.x, mouseTurn.y, cursor.transform.position.z);
 
         if ((currMousePos.x >= delimiters[0].position.x) && (currMousePos.x <= delimiters[1].position.x))
         {
             newCursorPos.x = currMousePos.x;
-            Debug.Log("Inside X delimiter");
+            //Debug.Log("Inside X delimiter");
         }
 
         if ((currMousePos.y <= delimiters[2].position.y) && (currMousePos.y >= delimiters[3].position.y))
         {
             newCursorPos.y = currMousePos.y;
-            Debug.Log("Inside Y delimiter");
+            //Debug.Log("Inside Y delimiter");
         }
 
         cursor.transform.position = newCursorPos;
