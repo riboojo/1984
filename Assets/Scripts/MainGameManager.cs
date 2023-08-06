@@ -7,7 +7,10 @@ public class MainGameManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject blur;
-    
+
+    [SerializeField]
+    private GameObject guides;
+
     [SerializeField]
     private Camera mainCamera;
 
@@ -35,12 +38,10 @@ public class MainGameManager : MonoBehaviour
 
     private void UpdateGameMode()
     {
-        //if (screenActiveRequest && !isScreenActive)
         if (screenActiveRequest)
         {
             ActivateScreen();
         }
-        //else if (!screenActiveRequest && isScreenActive)
         else
         {
             DeactivateScreen();
@@ -50,23 +51,21 @@ public class MainGameManager : MonoBehaviour
     private void ActivateScreen()
     {
         //blur.SetActive(true);
+        guides.SetActive(false);
         CursorManager.GetInstance().SetCursorStatus(true);
 
         mainCamera.GetComponent<CameraMovement>().CenterCamera();
         mainCamera.GetComponent<Animator>().SetBool("zoom", true);
-
-        isScreenActive = true;
     }
 
     private void DeactivateScreen()
     {
         //blur.SetActive(false);
+        guides.SetActive(true);
         CursorManager.GetInstance().SetCursorStatus(false);
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();
         mainCamera.GetComponent<Animator>().SetBool("zoom", false);
-
-        isScreenActive = false;
     }
 
 }
