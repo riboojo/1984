@@ -7,32 +7,78 @@ public class DisketBehavior : MonoBehaviour
     [SerializeField]
     SelectableManager selectableManager;
 
+    [SerializeField]
+    GameObject UIText;
+
     bool objectShown = false;
+    bool objectPlugged = false;
 
     void Update()
     {
         if (objectShown)
         {
-            if (Input.GetMouseButton(0))
+            if (Input.GetKeyDown(KeyCode.Q))
             {
-                GetComponentInParent<Animator>().SetTrigger("hide");
+                GetComponent<Animator>().SetTrigger("hide");
                 selectableManager.ObjectReleased();
                 objectShown = false;
             }
 
-            if (Input.GetMouseButton(1))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                GetComponentInParent<Animator>().SetTrigger("play");
+                GetComponent<Animator>().SetTrigger("play");
                 selectableManager.ObjectReleased();
+                selectableManager.DisketPlugged(true);
                 objectShown = false;
+                objectPlugged = true;
             }
 
         }
     }
 
-    public void ObjectSelected()
+    public bool ObjectSelected()
     {
-        GetComponentInParent<Animator>().SetTrigger("show");
-        objectShown = true;
+        bool ret = false;
+
+        if (!objectPlugged)
+        {
+            UIText.SetActive(false);
+            GetComponent<Animator>().SetTrigger("show");
+            objectShown = true;
+
+            ret = true;
+        }
+
+        return ret;
     }
+
+    public void ObjectHigligthed(bool higlighted)
+    {
+        if (higlighted && !objectPlugged)
+        {
+            UIText.SetActive(true);
+            UIText.GetComponent<TextMesh>().text = "Inspect\n(Right Click)";
+        }
+        else
+        {
+            UIText.SetActive(false);
+        }
+    }
+
+    public void ObjectUnplugged()
+    {
+        if (objectPlugged)
+        {
+            GetComponent<Animator>().SetTrigger("out");
+            selectableManager.DisketPlugged(false);
+            objectPlugged = false;
+        }
+    }
+
+
+    public bool IsPlugged()
+    {
+        return objectPlugged;
+    }
+    
 }

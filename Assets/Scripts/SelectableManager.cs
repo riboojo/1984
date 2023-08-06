@@ -6,6 +6,7 @@ public class SelectableManager : MonoBehaviour
     RaycastHit lastHit = new RaycastHit();
 
     bool objectSelected = false;
+    bool disketPlugged = false;
     bool mouseClicked = false;
     
     void Update()
@@ -29,7 +30,7 @@ public class SelectableManager : MonoBehaviour
 
                 if (currentHit.collider.gameObject.TryGetComponent<Outline>(out outline))
                 {
-                    outline.OutlineWidth = 7f;
+                    outline.OutlineWidth = 5f;
                 }
                 else
                 {
@@ -37,11 +38,12 @@ public class SelectableManager : MonoBehaviour
 
                     outline.OutlineMode = Outline.Mode.OutlineAll;
                     outline.OutlineColor = Color.yellow;
-                    outline.OutlineWidth = 7f;
+                    outline.OutlineWidth = 5f;
                 }
 
-                if (lastHit.GetHashCode() != currentHit.GetHashCode())
+                if (lastHit.collider.GetHashCode() != currentHit.collider.GetHashCode())
                 {
+                    ObjectHigligthed(currentHit, true);
                     CleanLastSelectable();
                     lastHit = currentHit;
                 }
@@ -51,11 +53,13 @@ public class SelectableManager : MonoBehaviour
             else
             {
                 CleanLastSelectable();
+                lastHit = currentHit;
             }
         }
         else
         {
             CleanLastSelectable();
+            lastHit = currentHit;
         }
     }
 
@@ -74,6 +78,20 @@ public class SelectableManager : MonoBehaviour
         }
     }
 
+    void CleanLastSelectable()
+    {
+        Outline outline;
+
+        if (lastHit.collider != null)
+        {
+            if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+            {
+                outline.OutlineWidth = 0f;
+                ObjectHigligthed(lastHit, false);
+            }
+        }
+    }
+
     void ObjectSelected(GameObject selected)
     {
         Outline outline;
@@ -81,14 +99,16 @@ public class SelectableManager : MonoBehaviour
         DisketBehavior disket;
         disket = selected.GetComponentInParent<DisketBehavior>();
 
-        if (disket != null)
+        if (disket != null && !disketPlugged)
         {
-            objectSelected = true;
-            disket.ObjectSelected();
-
-            if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+            if (disket.ObjectSelected())
             {
-                outline.OutlineWidth = 0f;
+                objectSelected = true;
+
+                if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+                {
+                    outline.OutlineWidth = 0f;
+                }
             }
         }
 
@@ -99,18 +119,40 @@ public class SelectableManager : MonoBehaviour
         {
             mainSwitch.ObjectSelected();
         }
+
+        EjectButtonBehavior ejectButton;
+        ejectButton = selected.GetComponentInParent<EjectButtonBehavior>();
+
+        if (ejectButton != null)
+        {
+            ejectButton.ObjectSelected();
+        }
     }
 
-    void CleanLastSelectable()
+    void ObjectHigligthed(RaycastHit hit, bool higlighted)
     {
-        Outline outline;
+        DisketBehavior disket;
+        disket = hit.collider.gameObject.GetComponentInParent<DisketBehavior>();
 
-        if (lastHit.collider != null)
+        if (disket != null)
         {
-            if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
-            {
-                outline.OutlineWidth = 0f;
-            }
+            disket.ObjectHigligthed(higlighted);
+        }
+
+        MainSwitchBehavior mainSwitch;
+        mainSwitch = hit.collider.gameObject.GetComponentInParent<MainSwitchBehavior>();
+
+        if (mainSwitch != null)
+        {
+            mainSwitch.ObjectHigligthed(higlighted);
+        }
+
+        EjectButtonBehavior ejectButton;
+        ejectButton = hit.collider.gameObject.GetComponentInParent<EjectButtonBehavior>();
+
+        if (ejectButton != null)
+        {
+            ejectButton.ObjectHigligthed(higlighted);
         }
     }
 
@@ -118,4 +160,10 @@ public class SelectableManager : MonoBehaviour
     {
         objectSelected = false;
     }
+
+    public void DisketPlugged(bool plugged)
+    {
+        disketPlugged = plugged;
+    }
+
 }

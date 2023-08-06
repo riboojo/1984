@@ -7,6 +7,9 @@ public class MainSwitchBehavior : MonoBehaviour
     [SerializeField]
     SelectableManager selectableManager;
 
+    [SerializeField]
+    GameObject UIText;
+
     bool switchOn = false;
 
     public void ObjectSelected()
@@ -20,6 +23,27 @@ public class MainSwitchBehavior : MonoBehaviour
         {
             GetComponentInParent<Animator>().SetTrigger("on");
             switchOn = true;
+        }
+    }
+
+    public void ObjectHigligthed(bool higlighted)
+    {
+        if (higlighted)
+        {
+            UIText.SetActive(true);
+
+            if (switchOn)
+            {
+                UIText.GetComponent<TextMesh>().text = "Turn Off\n(Left Click)";
+            }
+            else
+            {
+                UIText.GetComponent<TextMesh>().text = "Turn On\n(Left Click)";
+            }
+        }
+        else
+        {
+            UIText.SetActive(false);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class MainGameManager : MonoBehaviour
 {
     [SerializeField]
     private CursorManager cursorManager;
@@ -15,16 +15,17 @@ public class GameManager : MonoBehaviour
     private Camera mainCamera;
 
     private bool isScreenActive = false;
+    private bool screenActiveRequest = false;
 
     void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            isScreenActive = true;
+            screenActiveRequest = true;
         }
         else
         {
-            isScreenActive = false;
+            screenActiveRequest = false;
         }
 
         UpdateGameMode();
@@ -37,10 +38,12 @@ public class GameManager : MonoBehaviour
 
     private void UpdateGameMode()
     {
-        if (isScreenActive)
+        //if (screenActiveRequest && !isScreenActive)
+        if (screenActiveRequest)
         {
             ActivateScreen();
         }
+        //else if (!screenActiveRequest && isScreenActive)
         else
         {
             DeactivateScreen();
@@ -49,18 +52,24 @@ public class GameManager : MonoBehaviour
 
     private void ActivateScreen()
     {
-        blur.SetActive(true);
+        //blur.SetActive(true);
         cursorManager.SetCursorStatus(true);
 
         mainCamera.GetComponent<CameraMovement>().CenterCamera();
+        mainCamera.GetComponent<Animator>().SetBool("zoom", true);
+
+        isScreenActive = true;
     }
 
     private void DeactivateScreen()
     {
-        blur.SetActive(false);
+        //blur.SetActive(false);
         cursorManager.SetCursorStatus(false);
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();
+        mainCamera.GetComponent<Animator>().SetBool("zoom", false);
+
+        isScreenActive = false;
     }
 
 }
