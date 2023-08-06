@@ -5,9 +5,6 @@ using UnityEngine;
 public class MainSwitchBehavior : MonoBehaviour
 {
     [SerializeField]
-    SelectableManager selectableManager;
-
-    [SerializeField]
     GameObject UIText;
 
     bool switchOn = false;
@@ -16,13 +13,24 @@ public class MainSwitchBehavior : MonoBehaviour
     {
         if (switchOn)
         {
+            ScreenManager.GetInstance().TurnOffScreen();
             GetComponentInParent<Animator>().SetTrigger("off");
             switchOn = false;
         }
         else
         {
             GetComponentInParent<Animator>().SetTrigger("on");
+            ScreenManager.GetInstance().TurnOnScreen();
             switchOn = true;
+
+            if (!ConversationManager.GetInstance().NewDisketPlayed())
+            {
+                ScreenManager.GetInstance().SetNoise();
+            }
+            else
+            {
+                ScreenManager.GetInstance().ClearNoise();
+            }
         }
     }
 
@@ -45,5 +53,12 @@ public class MainSwitchBehavior : MonoBehaviour
         {
             UIText.SetActive(false);
         }
+    }
+
+    public void TurnOff()
+    {
+        ScreenManager.GetInstance().TurnOffScreen();
+        GetComponentInParent<Animator>().SetTrigger("off");
+        switchOn = false;
     }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CursorManager : MonoBehaviour
 {
+    private static CursorManager instance;
+
     [SerializeField]
     private GameObject cursor;
     [SerializeField]
@@ -15,11 +17,22 @@ public class CursorManager : MonoBehaviour
     private Vector2 mouseTurn;
 
     private bool canMove = false;
-    
+
     void Awake()
     {
+        if (instance != null)
+        {
+            Debug.LogWarning("Found more than one DialogueManager in the scene");
+        }
+        instance = this;
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public static CursorManager GetInstance()
+    {
+        return instance;
     }
 
     void Update()

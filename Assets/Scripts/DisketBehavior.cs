@@ -5,9 +5,6 @@ using UnityEngine;
 public class DisketBehavior : MonoBehaviour
 {
     [SerializeField]
-    SelectableManager selectableManager;
-
-    [SerializeField]
     GameObject UIText;
 
     bool objectShown = false;
@@ -20,15 +17,15 @@ public class DisketBehavior : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 GetComponent<Animator>().SetTrigger("hide");
-                selectableManager.ObjectReleased();
+                SelectableManager.GetInstance().ObjectReleased();
                 objectShown = false;
             }
 
             if (Input.GetKeyDown(KeyCode.E))
             {
                 GetComponent<Animator>().SetTrigger("play");
-                selectableManager.ObjectReleased();
-                selectableManager.DisketPlugged(true);
+                SelectableManager.GetInstance().ObjectReleased();
+                SelectableManager.GetInstance().DisketPlugged(true);
                 objectShown = false;
                 objectPlugged = true;
             }
@@ -70,7 +67,9 @@ public class DisketBehavior : MonoBehaviour
         if (objectPlugged)
         {
             GetComponent<Animator>().SetTrigger("out");
-            selectableManager.DisketPlugged(false);
+            SelectableManager.GetInstance().DisketPlugged(false);
+            ConversationManager.GetInstance().DisketUnplugged();
+            ScreenManager.GetInstance().SetNoise();
             objectPlugged = false;
         }
     }

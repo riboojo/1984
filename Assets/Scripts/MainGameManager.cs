@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class MainGameManager : MonoBehaviour
 {
     [SerializeField]
-    private CursorManager cursorManager;
-
-    [SerializeField]
     private GameObject blur;
     
     [SerializeField]
@@ -53,7 +50,7 @@ public class MainGameManager : MonoBehaviour
     private void ActivateScreen()
     {
         //blur.SetActive(true);
-        cursorManager.SetCursorStatus(true);
+        CursorManager.GetInstance().SetCursorStatus(true);
 
         mainCamera.GetComponent<CameraMovement>().CenterCamera();
         mainCamera.GetComponent<Animator>().SetBool("zoom", true);
@@ -64,7 +61,7 @@ public class MainGameManager : MonoBehaviour
     private void DeactivateScreen()
     {
         //blur.SetActive(false);
-        cursorManager.SetCursorStatus(false);
+        CursorManager.GetInstance().SetCursorStatus(false);
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();
         mainCamera.GetComponent<Animator>().SetBool("zoom", false);

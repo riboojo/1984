@@ -5,13 +5,13 @@ using UnityEngine;
 public class EjectButtonBehavior : MonoBehaviour
 {
     [SerializeField]
-    SelectableManager selectableManager;
-
-    [SerializeField]
     GameObject UIText;
 
     [SerializeField]
     DisketBehavior[] diskets;
+
+    [SerializeField]
+    MainSwitchBehavior mainSwitch;
 
     public void ObjectSelected()
     {
@@ -23,6 +23,7 @@ public class EjectButtonBehavior : MonoBehaviour
             if (disket.IsPlugged())
             {
                 disket.ObjectUnplugged();
+                mainSwitch.TurnOff();
             }
         }
     }

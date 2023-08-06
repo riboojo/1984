@@ -3,12 +3,28 @@ using UnityEngine;
 
 public class SelectableManager : MonoBehaviour
 {
+    private static SelectableManager instance;
+
     RaycastHit lastHit = new RaycastHit();
 
     bool objectSelected = false;
     bool disketPlugged = false;
     bool mouseClicked = false;
-    
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("Found more than one DialogueManager in the scene");
+        }
+        instance = this;
+    }
+
+    public static SelectableManager GetInstance()
+    {
+        return instance;
+    }
+
     void Update()
     {
         if (!objectSelected)

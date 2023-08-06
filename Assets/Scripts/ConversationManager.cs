@@ -1,4 +1,5 @@
 using Ink.Runtime;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,8 @@ using UnityEngine;
 
 public class ConversationManager : MonoBehaviour
 {
+    private static ConversationManager instance;
+
     [SerializeField]
     TextMeshProUGUI conversation;
 
@@ -18,14 +21,35 @@ public class ConversationManager : MonoBehaviour
     private string newText = null;
 
     [SerializeField]
-    private TextAsset inkFile;
+    private DisketBehavior[] diskets;
+
+    [SerializeField]
+    private TextAsset[] inkFiles;
 
     private Story script;
 
-    [SerializeField] private GameObject[] choices;
+    private bool disketPlugged = false;
+
+    [SerializeField]
+    private GameObject[] choices;
+
     private TextMeshProUGUI[] choicesText;
 
     private bool spaceReleased = false;
+
+    void Awake()
+    {
+        if (instance != null)
+        {
+            Debug.LogWarning("Found more than one DialogueManager in the scene");
+        }
+        instance = this;
+    }
+
+    public static ConversationManager GetInstance()
+    {
+        return instance;
+    }
 
     private void Start()
     {
@@ -40,27 +64,58 @@ public class ConversationManager : MonoBehaviour
             choice.SetActive(false);
             choiceIndex++;
         }
+    }
 
-        script = new Story(inkFile.text);
+    public bool NewDisketPlayed()
+    {
+        bool ret = false;
+
+        foreach (DisketBehavior disket in diskets)
+        {
+            if (disket.IsPlugged())
+            {
+                script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
+                ContinueStory();
+                disketPlugged = true;
+                ret = true;
+                break;
+            }
+        }
+
+        return ret;
+    }
+
+    public void DisketUnplugged()
+    {
+        disketPlugged = false;
+        conversation.text = "";
+
+        foreach (GameObject choice in choices)
+        {
+            choice.SetActive(false);
+        }
     }
 
     private void Update()
     {
-        if (charIndex != 0)
+        if (disketPlugged)
         {
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (charIndex != 0)
             {
-                spaceReleased = true;
-            }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    spaceReleased = true;
+                }
 
-            AddText(newText);
-        }
-        else
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
+                AddText(newText);
+            }
+            else
             {
-                spaceReleased = false;
-                ContinueStory();
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    spaceReleased = false;
+                    ContinueStory();
+                }
             }
         }
     }
@@ -156,9 +211,12 @@ public class ConversationManager : MonoBehaviour
     {
         bool ret = false;
 
-        if (script.currentChoices.Count > 0 && charIndex == 0)
+        if (disketPlugged && script != null)
         {
-            ret = true;
+            if (script.currentChoices.Count > 0 && charIndex == 0)
+            {
+                ret = true;
+            }
         }
 
         return ret;

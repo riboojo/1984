@@ -9,13 +9,7 @@ public class ButtonManager : MonoBehaviour
     private GameObject cursorDefault;
     [SerializeField]
     private GameObject cursorClicked;
-
-    [SerializeField]
-    private CursorManager cursorManager;
-
-    [SerializeField]
-    ConversationManager conversationManager;
-
+    
     [SerializeField]
     private Button[] buttons;
     [SerializeField]
@@ -40,7 +34,7 @@ public class ButtonManager : MonoBehaviour
 
     void Update()
     {
-        if (conversationManager.areChoicesDisplayed())
+        if (ConversationManager.GetInstance().areChoicesDisplayed())
         {
             CheckMousePosition();
         }
@@ -52,7 +46,7 @@ public class ButtonManager : MonoBehaviour
 
     void CheckMousePosition()
     {
-        Vector3 cursorPosition = cursorManager.GetCursorPosition();
+        Vector3 cursorPosition = CursorManager.GetInstance().GetCursorPosition();
 
         if ((cursorPosition.x >= delimitersBtn1[0].position.x) && (cursorPosition.x <= delimitersBtn1[1].position.x)
             && (cursorPosition.y <= delimitersBtn1[2].position.y) && (cursorPosition.y >= delimitersBtn1[3].position.y))
@@ -114,11 +108,11 @@ public class ButtonManager : MonoBehaviour
 
     void CheckMouseClicked()
     {
-        if (conversationManager.areChoicesDisplayed())
+        if (ConversationManager.GetInstance().areChoicesDisplayed())
         {
             if (Input.GetMouseButtonDown(0))
             {
-                conversationManager.MakeChoice(selectedBtn);
+                ConversationManager.GetInstance().MakeChoice(selectedBtn);
             }
         }
     }
