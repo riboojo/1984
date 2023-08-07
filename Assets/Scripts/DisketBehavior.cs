@@ -74,7 +74,6 @@ public class DisketBehavior : MonoBehaviour
         }
     }
 
-
     public bool IsPlugged()
     {
         return objectPlugged;

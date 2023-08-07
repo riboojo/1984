@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,9 @@ public class MainGameManager : MonoBehaviour
 
     [SerializeField]
     private Camera mainCamera;
+
+    [SerializeField]
+    GameObject UIText_Guides;
 
     private bool isScreenActive = false;
     private bool screenActiveRequest = false;
@@ -51,7 +55,8 @@ public class MainGameManager : MonoBehaviour
     private void ActivateScreen()
     {
         //blur.SetActive(true);
-        guides.SetActive(false);
+        //guides.SetActive(false);
+        UIText_Guides.GetComponent<TextMeshProUGUI>().text = "Tip: Press Space to continue";
         CursorManager.GetInstance().SetCursorStatus(true);
 
         mainCamera.GetComponent<CameraMovement>().CenterCamera();
@@ -61,7 +66,8 @@ public class MainGameManager : MonoBehaviour
     private void DeactivateScreen()
     {
         //blur.SetActive(false);
-        guides.SetActive(true);
+        //guides.SetActive(true);
+        UIText_Guides.GetComponent<TextMeshProUGUI>().text = "Tip: Hold Shift to focus";
         CursorManager.GetInstance().SetCursorStatus(false);
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();

@@ -3,7 +3,27 @@ guid: f8dccc7c149b41c4ea8f5aad7220d7c6
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: floppy.005
+    second: {fileID: 2100000, guid: 31af4af01ee6f7a4ea6980e229cebd81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: floppy.006
+    second: {fileID: 2100000, guid: 04bebba9cb48dfd448e8b5ea3376420c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: floppy.008
+    second: {fileID: 2100000, guid: 6200a8b8102ca8448ae03bb693dd308a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: floppyMetal.004
+    second: {fileID: 2100000, guid: e0d721c39b02a474fa810511eec8a3c8, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -31,7 +51,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1

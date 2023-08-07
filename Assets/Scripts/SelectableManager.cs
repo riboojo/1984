@@ -5,6 +5,12 @@ public class SelectableManager : MonoBehaviour
 {
     private static SelectableManager instance;
 
+    [SerializeField]
+    MainSwitchBehavior mainSwitch;
+
+    [SerializeField]
+    DisketBehavior[] diskets;
+
     RaycastHit lastHit = new RaycastHit();
 
     bool objectSelected = false;
@@ -152,7 +158,10 @@ public class SelectableManager : MonoBehaviour
 
         if (disket != null)
         {
-            disket.ObjectHigligthed(higlighted);
+            if (!IsAnyDisketPlugged())
+            {
+                disket.ObjectHigligthed(higlighted);
+            }
         }
 
         MainSwitchBehavior mainSwitch;
@@ -182,4 +191,19 @@ public class SelectableManager : MonoBehaviour
         disketPlugged = plugged;
     }
 
+    public bool IsAnyDisketPlugged()
+    {
+        bool ret = false; 
+
+        foreach (DisketBehavior disket in diskets)
+        {
+            if (disket.IsPlugged())
+            {
+                ret = true;
+                break;
+            }
+        }
+
+        return ret;
+    }
 }
