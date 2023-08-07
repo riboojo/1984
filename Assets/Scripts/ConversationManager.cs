@@ -15,27 +15,29 @@ public class ConversationManager : MonoBehaviour
     [SerializeField]
     ButtonManager buttons;
 
-    private float timer;
-    private int charIndex = 0;
-
-    private string newText = null;
-
     [SerializeField]
     private DisketBehavior[] diskets;
 
     [SerializeField]
     private TextAsset[] inkFiles;
 
+    [SerializeField]
+    private GameObject[] choices;
+
     private Story script;
 
     private bool disketPlugged = false;
 
-    [SerializeField]
-    private GameObject[] choices;
+    private float timer;
+    private int charIndex = 0;
+
+    private string newText = null;
 
     private TextMeshProUGUI[] choicesText;
 
     private bool spaceReleased = false;
+
+    private int numberOfChoices = 0;
 
     void Awake()
     {
@@ -181,6 +183,7 @@ public class ConversationManager : MonoBehaviour
     private void DisplayChoices()
     {
         List<Choice> currentChoices = script.currentChoices;
+        numberOfChoices = script.currentChoices.Count;
 
         int index = 0;
         foreach (Choice choice in currentChoices)
@@ -220,5 +223,17 @@ public class ConversationManager : MonoBehaviour
         }
 
         return ret;
+    }
+
+    public int NumberOfChoices()
+    {
+        int number = 0;
+        
+        if (disketPlugged && script != null)
+        {
+            number = numberOfChoices;
+        }
+
+        return number;
     }
 }

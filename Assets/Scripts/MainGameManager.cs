@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class MainGameManager : MonoBehaviour
 {
+    private static MainGameManager instance;
+
     [SerializeField]
     private GameObject blur;
 
@@ -18,31 +20,93 @@ public class MainGameManager : MonoBehaviour
     [SerializeField]
     GameObject UIText_Guides;
 
-    private bool isScreenActive = false;
-    private bool screenActiveRequest = false;
-
-    void Update()
+    public enum GameState
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        Intro = 0,
+        LookingAround,
+        ObjectSelected,
+        PlayingDisket
+    }
+
+    private GameState state = GameState.LookingAround;
+    
+    private void Awake()
+    {
+        if ((instance != null) && (instance != this))
         {
-            screenActiveRequest = true;
+            Debug.LogError("Instance of StateMachine has already been created!");
+            Destroy(this.gameObject);
         }
         else
         {
-            screenActiveRequest = false;
+            instance = this;
         }
-
-        UpdateGameMode();
     }
 
-    public void MouseCalibrationRequested()
+    public static MainGameManager GetInstance()
+    {
+        return instance;
+    }
+
+    void Update()
+    {
+        MainStateMachine();
+    }
+
+    void MainStateMachine()
+    {
+        switch (state)
+        {
+            case GameState.Intro:
+                StateIntro();
+                break;
+            case GameState.LookingAround:
+                StateLookingAround();
+                break;
+            case GameState.ObjectSelected:
+                StateObjectSelected();
+                break;
+            case GameState.PlayingDisket:
+                StatePlayingDisket();
+                break;
+            default:
+                break;
+        }
+    }
+
+    public GameState GetState()
+    {
+        return state;
+    }
+
+    public void SetState(GameState newSatate)
+    {
+        state = newSatate;
+    }
+
+    private void StateIntro()
     {
 
     }
 
-    private void UpdateGameMode()
+    private void StateLookingAround()
     {
-        if (screenActiveRequest)
+        UpdateScreenStatus();
+    }
+
+    private void StateObjectSelected()
+    {
+
+    }
+
+    private void StatePlayingDisket()
+    {
+        UpdateScreenStatus();
+    }
+
+    private void UpdateScreenStatus()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
         {
             ActivateScreen();
         }
