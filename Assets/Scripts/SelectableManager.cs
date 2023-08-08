@@ -50,27 +50,30 @@ public class SelectableManager : MonoBehaviour
             {
                 Outline outline;
 
-                if (currentHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+                if (lastHit.collider != null && currentHit.collider != null)
                 {
-                    outline.OutlineWidth = 5f;
-                }
-                else
-                {
-                    outline = currentHit.collider.gameObject.AddComponent<Outline>();
+                    if (currentHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+                    {
+                        outline.OutlineWidth = 5f;
+                    }
+                    else
+                    {
+                        outline = currentHit.collider.gameObject.AddComponent<Outline>();
 
-                    outline.OutlineMode = Outline.Mode.OutlineAll;
-                    outline.OutlineColor = Color.yellow;
-                    outline.OutlineWidth = 5f;
-                }
+                        outline.OutlineMode = Outline.Mode.OutlineAll;
+                        outline.OutlineColor = Color.yellow;
+                        outline.OutlineWidth = 5f;
+                    }
 
-                if (lastHit.collider.GetHashCode() != currentHit.collider.GetHashCode())
-                {
-                    ObjectHigligthed(currentHit, true);
-                    CleanLastSelectable();
-                    lastHit = currentHit;
+                    if (lastHit.collider.GetHashCode() != currentHit.collider.GetHashCode())
+                    {
+                        ObjectHigligthed(currentHit, true);
+                        CleanLastSelectable();
+                        lastHit = currentHit;
+                    }
+
+                    CheckClick(currentHit.collider.gameObject);
                 }
-                
-                CheckClick(currentHit.collider.gameObject);
             }
             else
             {

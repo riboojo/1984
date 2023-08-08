@@ -100,4 +100,14 @@ public class CursorManager : MonoBehaviour
 
         cursor.transform.position = newCursorPos;
     }
+
+    public void ShowCursor()
+    {
+        cursor.SetActive(true);
+    }
+
+    public void HideCursor()
+    {
+        cursor.SetActive(false);
+    }
 }

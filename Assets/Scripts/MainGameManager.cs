@@ -25,10 +25,11 @@ public class MainGameManager : MonoBehaviour
         Intro = 0,
         LookingAround,
         ObjectSelected,
-        PlayingDisket
+        PlayingDisket,
+        Default
     }
 
-    private GameState state = GameState.LookingAround;
+    private GameState state = GameState.Default;
     
     private void Awake()
     {
@@ -69,6 +70,9 @@ public class MainGameManager : MonoBehaviour
             case GameState.PlayingDisket:
                 StatePlayingDisket();
                 break;
+            case GameState.Default:
+                StateDefault();
+                break;
             default:
                 break;
         }
@@ -102,6 +106,13 @@ public class MainGameManager : MonoBehaviour
     private void StatePlayingDisket()
     {
         UpdateScreenStatus();
+        UpdateConversationLog();
+    }
+
+    private void StateDefault()
+    {
+        UpdateScreenStatus();
+        UpdateConversationLog();
     }
 
     private void UpdateScreenStatus()
@@ -136,6 +147,18 @@ public class MainGameManager : MonoBehaviour
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();
         mainCamera.GetComponent<Animator>().SetBool("zoom", false);
+    }
+
+    private void UpdateConversationLog()
+    {
+        if (Input.GetKey(KeyCode.Tab))
+        {
+            ConversationManager.GetInstance().ShowLog();
+        }
+        else
+        {
+            ConversationManager.GetInstance().HideLog();
+        }
     }
 
 }

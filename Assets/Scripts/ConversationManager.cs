@@ -2,6 +2,7 @@ using Ink.Runtime;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -11,6 +12,9 @@ public class ConversationManager : MonoBehaviour
 
     [SerializeField]
     TextMeshProUGUI conversation;
+
+    [SerializeField]
+    TextMeshProUGUI log;
 
     [SerializeField]
     ButtonManager buttons;
@@ -23,6 +27,12 @@ public class ConversationManager : MonoBehaviour
 
     [SerializeField]
     private GameObject[] choices;
+
+    [SerializeField]
+    private GameObject scrollUpperIcon;
+
+    [SerializeField]
+    private GameObject scrollBottomIcon;
 
     private Story script;
 
@@ -38,6 +48,11 @@ public class ConversationManager : MonoBehaviour
     private bool spaceReleased = false;
 
     private int numberOfChoices = 0;
+    private int MAX_CHOICES = 4;
+
+    private bool isLogShown = false;
+    private bool isUpArrowPressed = false;
+    private bool isDownArrowPressed = false;
 
     void Awake()
     {
@@ -76,6 +91,9 @@ public class ConversationManager : MonoBehaviour
         {
             if (disket.IsPlugged())
             {
+                log.text = "";
+                log.pageToDisplay = 1;
+
                 script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
                 ContinueStory();
                 disketPlugged = true;
@@ -128,6 +146,7 @@ public class ConversationManager : MonoBehaviour
         {
             newText = script.Continue();
             AddText(newText);
+            AddTextToLog();
         }
     }
 
@@ -235,5 +254,106 @@ public class ConversationManager : MonoBehaviour
         }
 
         return number;
+    }
+
+    public void ShowLog()
+    {
+        if (disketPlugged && script != null)
+        {
+            CursorManager.GetInstance().HideCursor();
+
+            if (!isLogShown)
+            {
+                for (int i = 0; i < numberOfChoices; i++)
+                {
+                    choices[i].gameObject.SetActive(false);
+                }
+
+                conversation.enabled = false;
+                log.enabled = true;
+                isLogShown = true;
+            }
+            else
+            {
+                CheckScroll();
+            }
+        }
+    }
+
+    public void HideLog()
+    {
+        CursorManager.GetInstance().ShowCursor();
+
+        for (int i = 0; i < numberOfChoices; i++)
+        {
+            choices[i].gameObject.SetActive(true);
+        }
+
+        log.enabled = false;
+        conversation.enabled = true;
+
+        scrollBottomIcon.SetActive(false);
+        scrollUpperIcon.SetActive(false);
+
+        isLogShown = false;
+    }
+
+    private void CheckScroll()
+    {
+        if (log.textInfo.pageCount > 1)
+        {
+            scrollBottomIcon.SetActive(true);
+        }
+        else
+        {
+            scrollBottomIcon.SetActive(false);
+        }
+
+        if (log.pageToDisplay > 1)
+        {
+            scrollUpperIcon.SetActive(true);
+        }
+        else
+        {
+            scrollUpperIcon.SetActive(false);
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            isUpArrowPressed = true;
+        }
+        else
+        {
+            if (isUpArrowPressed)
+            {
+                if (log.pageToDisplay > 1)
+                {
+                    log.pageToDisplay--;
+                }
+                isUpArrowPressed = false;
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            isDownArrowPressed = true;
+        }
+        else
+        {
+            if (isDownArrowPressed)
+            {
+                if ((log.textInfo.pageCount > 1) && (log.pageToDisplay != log.textInfo.pageCount))
+                {
+                    log.pageToDisplay++;
+                }
+
+                isDownArrowPressed = false;
+            }
+        }
+    }
+
+    private void AddTextToLog()
+    {
+        log.text += newText;
     }
 }
