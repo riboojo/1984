@@ -7,10 +7,19 @@ namespace StixGames.GrassShader
 	{
 		public Vector3 axis = Vector3.forward;
 		public float speed = 90;
+        public bool isActive = false;
 
 		void Update()
 		{
-			transform.rotation *= Quaternion.AngleAxis(speed * Time.deltaTime, axis);
+            if (isActive)
+            {
+                transform.rotation *= Quaternion.AngleAxis(speed * Time.deltaTime, axis);
+            }
 		}
+
+        public void SetState(bool state)
+        {
+            isActive = state;
+        }
 	}
 }

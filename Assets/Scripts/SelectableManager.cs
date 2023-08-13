@@ -11,6 +11,9 @@ public class SelectableManager : MonoBehaviour
     [SerializeField]
     DisketBehavior[] diskets;
 
+    [SerializeField]
+    Light spotLight;
+
     RaycastHit lastHit = new RaycastHit();
 
     bool objectSelected = false;
@@ -129,6 +132,7 @@ public class SelectableManager : MonoBehaviour
             if (disket.ObjectSelected())
             {
                 objectSelected = true;
+                TurnSpotlight(true);
 
                 if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
                 {
@@ -151,6 +155,23 @@ public class SelectableManager : MonoBehaviour
         if (ejectButton != null)
         {
             ejectButton.ObjectSelected();
+        }
+
+        NotepadBehavior notepad;
+        notepad = selected.GetComponentInParent<NotepadBehavior>();
+
+        if (notepad != null)
+        {
+            if (notepad.ObjectSelected())
+            {
+                objectSelected = true;
+                TurnSpotlight(true);
+
+                if (lastHit.collider.gameObject.TryGetComponent<Outline>(out outline))
+                {
+                    outline.OutlineWidth = 0f;
+                }
+            }
         }
     }
 
@@ -182,11 +203,32 @@ public class SelectableManager : MonoBehaviour
         {
             ejectButton.ObjectHigligthed(higlighted);
         }
+
+        NotepadBehavior notepad;
+        notepad = hit.collider.gameObject.GetComponentInParent<NotepadBehavior>();
+
+        if (notepad != null)
+        {
+            notepad.ObjectHigligthed(higlighted);
+        }
+    }
+
+    void TurnSpotlight(bool turnOn)
+    {
+        if (turnOn)
+        {
+            spotLight.intensity = 0.19f;
+        }
+        else
+        {
+            spotLight.intensity = 0f;
+        }
     }
 
     public void ObjectReleased()
     {
         objectSelected = false;
+        TurnSpotlight(false);
     }
 
     public void DisketPlugged(bool plugged)
@@ -209,4 +251,5 @@ public class SelectableManager : MonoBehaviour
 
         return ret;
     }
+
 }

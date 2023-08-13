@@ -91,7 +91,7 @@ public class ConversationManager : MonoBehaviour
         {
             if (disket.IsPlugged())
             {
-                log.text = "";
+                log.text = "<align=center><b>Conversation Log</b><align=justified>\n\n";
                 log.pageToDisplay = 1;
 
                 script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
@@ -300,7 +300,7 @@ public class ConversationManager : MonoBehaviour
 
     private void CheckScroll()
     {
-        if (log.textInfo.pageCount > 1)
+        if ((log.textInfo.pageCount > 1) && (log.pageToDisplay != log.textInfo.pageCount))
         {
             scrollBottomIcon.SetActive(true);
         }

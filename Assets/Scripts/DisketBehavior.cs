@@ -54,7 +54,7 @@ public class DisketBehavior : MonoBehaviour
         if (higlighted && !objectPlugged)
         {
             UIText.SetActive(true);
-            UIText.GetComponent<TextMesh>().text = "Inspect\n(Right Click)";
+            UIText.GetComponent<TextMesh>().text = "Inspect\n(Left Click)";
         }
         else
         {
