@@ -34,6 +34,12 @@ public class SelectableManager : MonoBehaviour
         return instance;
     }
 
+    private void Start()
+    {
+        objectSelected = true;
+        TurnSpotlight(true);
+    }
+
     void Update()
     {
         if (!objectSelected)

@@ -10,6 +10,13 @@ public class DisketBehavior : MonoBehaviour
     bool objectShown = false;
     bool objectPlugged = false;
 
+    AudioSource audio;
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         if (objectShown)
@@ -23,6 +30,7 @@ public class DisketBehavior : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                audio.Play();
                 GetComponent<Animator>().SetTrigger("play");
                 SelectableManager.GetInstance().ObjectReleased();
                 SelectableManager.GetInstance().DisketPlugged(true);
@@ -69,7 +77,6 @@ public class DisketBehavior : MonoBehaviour
             GetComponent<Animator>().SetTrigger("out");
             SelectableManager.GetInstance().DisketPlugged(false);
             ConversationManager.GetInstance().DisketUnplugged();
-            ScreenManager.GetInstance().SetNoise();
             objectPlugged = false;
         }
     }

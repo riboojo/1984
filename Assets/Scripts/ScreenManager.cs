@@ -18,6 +18,8 @@ public class ScreenManager : MonoBehaviour
     private bool isOn;
     private bool isNoise;
 
+    AudioSource audio;
+
     void Awake()
     {
         if (instance != null)
@@ -25,6 +27,11 @@ public class ScreenManager : MonoBehaviour
             Debug.LogWarning("Found more than one DialogueManager in the scene");
         }
         instance = this;
+    }
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -68,11 +75,13 @@ public class ScreenManager : MonoBehaviour
     {
         isNoise = true;
         gameObject.GetComponent<Renderer>().material = noise;
+        audio.Play();
     }
 
     public void ClearNoise()
     {
         isNoise = false;
         gameObject.GetComponent<Renderer>().material = normal;
+        audio.Stop();
     }
 }

@@ -13,8 +13,17 @@ public class EjectButtonBehavior : MonoBehaviour
     [SerializeField]
     MainSwitchBehavior mainSwitch;
 
+    AudioSource audio;
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
     public void ObjectSelected()
     {
+        audio.Play();
+
         UIText.SetActive(false);
         GetComponentInParent<Animator>().SetTrigger("push");
 

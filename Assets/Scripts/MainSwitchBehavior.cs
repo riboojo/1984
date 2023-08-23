@@ -9,8 +9,17 @@ public class MainSwitchBehavior : MonoBehaviour
 
     bool switchOn = false;
 
+    AudioSource audio;
+
+    private void Start()
+    {
+        audio = GetComponent<AudioSource>();
+    }
+
     public void ObjectSelected()
     {
+        audio.Play();
+
         if (switchOn)
         {
             ScreenManager.GetInstance().TurnOffScreen();
@@ -57,6 +66,7 @@ public class MainSwitchBehavior : MonoBehaviour
 
     public void TurnOff()
     {
+        ScreenManager.GetInstance().ClearNoise();
         ScreenManager.GetInstance().TurnOffScreen();
         GetComponentInParent<Animator>().SetTrigger("off");
         switchOn = false;

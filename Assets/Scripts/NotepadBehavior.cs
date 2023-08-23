@@ -9,6 +9,12 @@ public class NotepadBehavior : MonoBehaviour
 
     bool objectShown = false;
 
+    private void Start()
+    {
+        UIText.SetActive(false);
+        objectShown = true;
+    }
+
     private void Update()
     {
         if (objectShown)
