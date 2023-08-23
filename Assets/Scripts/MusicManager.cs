@@ -12,7 +12,9 @@ public class MusicManager : MonoBehaviour
     [SerializeField]
     AudioClip[] music;
 
-    private int index = 0;
+    private int index = 1;
+    private bool isPlaying = false;
+    private const int MAX_SONGS = 4;
 
     void Awake()
     {
@@ -27,39 +29,35 @@ public class MusicManager : MonoBehaviour
     {
         return instance;
     }
-    
-    void Update()
+
+    public void Play()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        isPlaying = true;
+        radio.PlayOneShot(music[index]);
+    }
+
+    public void Stop()
+    {
+        isPlaying = false;
+        radio.Stop();
+    }
+
+    public void PlayNextSong()
+    {
+        if (isPlaying)
         {
-            index = 0;
             radio.Stop();
+
+            if (index < MAX_SONGS)
+            {
+                index++;
+            }
+            else
+            {
+                index = 0;
+            }
+
             radio.PlayOneShot(music[index]);
         }
-        else if (Input.GetKeyDown(KeyCode.S))
-        {
-            index = 1;
-            radio.Stop();
-            radio.PlayOneShot(music[index]);
-        }
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            index = 2;
-            radio.Stop();
-            radio.PlayOneShot(music[index]);
-        }
-        else if (Input.GetKeyDown(KeyCode.F))
-        {
-            index = 3;
-            radio.Stop();
-            radio.PlayOneShot(music[index]);
-        }
-        else if (Input.GetKeyDown(KeyCode.G))
-        {
-            index = 4;
-            radio.Stop();
-            radio.PlayOneShot(music[index]);
-        }
-        else { }
     }
 }

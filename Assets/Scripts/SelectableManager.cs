@@ -179,6 +179,14 @@ public class SelectableManager : MonoBehaviour
                 }
             }
         }
+
+        RadioBehavior radio;
+        radio = selected.GetComponent<RadioBehavior>();
+
+        if (radio != null)
+        {
+            radio.ObjectSelected();
+        }
     }
 
     void ObjectHigligthed(RaycastHit hit, bool higlighted)
@@ -216,6 +224,14 @@ public class SelectableManager : MonoBehaviour
         if (notepad != null)
         {
             notepad.ObjectHigligthed(higlighted);
+        }
+
+        RadioBehavior radio;
+        radio = hit.collider.gameObject.GetComponent<RadioBehavior>();
+
+        if (radio != null)
+        {
+            radio.ObjectHigligthed(higlighted);
         }
     }
 

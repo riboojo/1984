@@ -7,6 +7,12 @@ public class DisketBehavior : MonoBehaviour
     [SerializeField]
     GameObject UIText;
 
+    [SerializeField]
+    AudioClip show;
+
+    [SerializeField]
+    AudioClip insert;
+
     bool objectShown = false;
     bool objectPlugged = false;
 
@@ -23,6 +29,9 @@ public class DisketBehavior : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
+                audio.clip = show;
+                audio.Play();
+
                 GetComponent<Animator>().SetTrigger("hide");
                 SelectableManager.GetInstance().ObjectReleased();
                 objectShown = false;
@@ -30,7 +39,9 @@ public class DisketBehavior : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
+                audio.clip = insert;
                 audio.Play();
+
                 GetComponent<Animator>().SetTrigger("play");
                 SelectableManager.GetInstance().ObjectReleased();
                 SelectableManager.GetInstance().DisketPlugged(true);
@@ -47,6 +58,9 @@ public class DisketBehavior : MonoBehaviour
 
         if (!objectPlugged)
         {
+            audio.clip = show;
+            audio.Play();
+
             UIText.SetActive(false);
             GetComponent<Animator>().SetTrigger("show");
             objectShown = true;

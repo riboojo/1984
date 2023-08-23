@@ -9,10 +9,14 @@ public class NotepadBehavior : MonoBehaviour
 
     bool objectShown = false;
 
+    [SerializeField]
+    AudioSource audio;
+    
     private void Start()
     {
         UIText.SetActive(false);
         objectShown = true;
+        audio = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -21,6 +25,7 @@ public class NotepadBehavior : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
+                audio.Play();
                 GetComponent<Animator>().SetTrigger("hide");
                 SelectableManager.GetInstance().ObjectReleased();
                 objectShown = false;
@@ -32,6 +37,7 @@ public class NotepadBehavior : MonoBehaviour
     {
         bool ret = true;
 
+        audio.Play();
         UIText.SetActive(false);
         GetComponent<Animator>().SetTrigger("show");
         objectShown = true;
