@@ -32,14 +32,7 @@ public class MainSwitchBehavior : MonoBehaviour
             ScreenManager.GetInstance().TurnOnScreen();
             switchOn = true;
 
-            if (!ConversationManager.GetInstance().NewDisketPlayed())
-            {
-                ScreenManager.GetInstance().SetNoise();
-            }
-            else
-            {
-                ScreenManager.GetInstance().ClearNoise();
-            }
+            CheckNewDisket();
         }
     }
 
@@ -70,5 +63,17 @@ public class MainSwitchBehavior : MonoBehaviour
         ScreenManager.GetInstance().TurnOffScreen();
         GetComponentInParent<Animator>().SetTrigger("off");
         switchOn = false;
+    }
+
+    public void CheckNewDisket()
+    {
+        if (!ConversationManager.GetInstance().NewDisketPlayed())
+        {
+            ScreenManager.GetInstance().SetNoise();
+        }
+        else
+        {
+            ScreenManager.GetInstance().ClearNoise();
+        }
     }
 }

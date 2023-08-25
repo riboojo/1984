@@ -5,20 +5,20 @@ using UnityEngine;
 public class ScreenManager : MonoBehaviour
 {
     private static ScreenManager instance;
-
-    [SerializeField]
-    Material noise;
-
-    [SerializeField]
-    Material normal;
-
+    
     [SerializeField]
     Animator led;
+
+    [SerializeField]
+    GameObject noise;
 
     private bool isOn;
     private bool isNoise;
 
     AudioSource audio;
+
+    Color black = Color.black;
+    Color transparent = new Color(0f,0f,0f,125f);
 
     void Awake()
     {
@@ -74,14 +74,21 @@ public class ScreenManager : MonoBehaviour
     public void SetNoise()
     {
         isNoise = true;
-        gameObject.GetComponent<Renderer>().material = noise;
+        noise.SetActive(true);
+        GetComponentInParent<Animator>().SetBool("noise", true);
         audio.Play();
     }
 
     public void ClearNoise()
     {
         isNoise = false;
-        gameObject.GetComponent<Renderer>().material = normal;
+        noise.SetActive(false);
+        GetComponentInParent<Animator>().SetBool("noise", false);
         audio.Stop();
+    }
+
+    public bool IsScreenOn()
+    {
+        return isOn;
     }
 }

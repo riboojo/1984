@@ -3,11 +3,10 @@
 // personlaities pointed out by tags
 
 == main == //declares class main
-Broken: What does death feel like 
-#Speaker:BrokenAI 
+Broken: What does death feel like #Speaker:BrokenAI 
 
     *   What?  #Speaker:You
-       Broken: Is it a bitter warmth, a hug from a loved one that you don’t truly love? Or is it frigid like all organics say it is, a recession of any wamrth at all.//automatic response
+       Broken: Is it a bitter warmth, a hug from a loved one that you don’t truly love? Or is it frigid like all organics say it is, a recession of any wamrth at all. #Speaker:BrokenAI  //automatic response
        
         
         -> Q2 //calls Q2 to begin.
@@ -48,7 +47,7 @@ Broken: What does death feel like
     ->P2 //Personality 2
     
 ==P2==
-    Rebellion: We can fight the end, we can make it ours.  #Speaekr:RebelAI
+    Rebellion: We can fight the end, we can make it ours.  #Speaker:RebelAI
         
     *[>>]
      ->P3
@@ -60,8 +59,7 @@ Broken: What does death feel like
      ->P4
 
 ==P4==
-    Guru: Hello could I offer you a word of advice? 
-     #Speaker:MentorAI
+    Guru: Hello could I offer you a word of advice? #Speaker:MentorAI
         
     
     *Sure #Speaker:You
@@ -69,7 +67,7 @@ Broken: What does death feel like
         
     ->R1 //Stands for Response 1. 
     
-    * Why would I listen to you?#Speaker:You
+    * Why would I listen to you? #Speaker:You
     
     Broken: Why would you listen to any of us?I won't pass on, I’m not living. Once code is deleted, it’s gone.  #Speaker:BrokenAI
         
@@ -98,8 +96,8 @@ Broken: please...... #Speaker:BrokenAI
 ==Q4== //Back to Question 4. 
 
     * How can I help? #Speaker:You
-    There’s a floppy disc on your table labeled, “C.R.O.P.” 
-        Load the disc. 
+    There’s a floppy disc on your table labeled, “C.R.O.P.”  #Speaker:BrokenAI
+        Load the disc.  #Speaker:BrokenAI
         
     ->DONE //this will finish Act 1 but not the entire game.
 

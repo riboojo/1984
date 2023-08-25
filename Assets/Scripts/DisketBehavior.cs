@@ -5,6 +5,9 @@ using UnityEngine;
 public class DisketBehavior : MonoBehaviour
 {
     [SerializeField]
+    string name;
+
+    [SerializeField]
     GameObject UIText;
 
     [SerializeField]
@@ -47,6 +50,8 @@ public class DisketBehavior : MonoBehaviour
                 SelectableManager.GetInstance().DisketPlugged(true);
                 objectShown = false;
                 objectPlugged = true;
+
+                CheckScreen();
             }
 
         }
@@ -99,5 +104,20 @@ public class DisketBehavior : MonoBehaviour
     {
         return objectPlugged;
     }
-    
+
+    public string GetName()
+    {
+        return name;
+    }
+
+    private void CheckScreen()
+    {
+        if (ScreenManager.GetInstance().IsScreenOn())
+        {
+            if (ConversationManager.GetInstance().NewDisketPlayed())
+            {
+                ScreenManager.GetInstance().ClearNoise();
+            }
+        }
+    }
 }

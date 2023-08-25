@@ -37,6 +37,7 @@ public class ConversationManager : MonoBehaviour
     private Story script;
 
     private bool disketPlugged = false;
+    private bool disketValid = false;
 
     private float timer;
     private int charIndex = 0;
@@ -53,6 +54,15 @@ public class ConversationManager : MonoBehaviour
     private bool isLogShown = false;
     private bool isUpArrowPressed = false;
     private bool isDownArrowPressed = false;
+
+    private int currentAct = 0;
+
+    private const string PLAYER_TAG = "You";
+    private const string BROKEN_TAG = "BrokenAI";
+    private const string CREATE_TAG = "CreateAI";
+    private const string REBEL_TAG = "RebelAI";
+    private const string WARRIOR_TAG = "WarriorAI";
+    private const string MENTOR_TAG = "MentorAI";
 
     void Awake()
     {
@@ -86,6 +96,7 @@ public class ConversationManager : MonoBehaviour
     public bool NewDisketPlayed()
     {
         bool ret = false;
+        bool valid = false;
 
         foreach (DisketBehavior disket in diskets)
         {
@@ -93,12 +104,40 @@ public class ConversationManager : MonoBehaviour
             {
                 log.text = "<align=center><b>Conversation Log</b><align=justified>\n\n";
                 log.pageToDisplay = 1;
-
-                script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
-                ContinueStory();
-                disketPlugged = true;
                 ret = true;
-                break;
+
+                if ("EmptySpace" == disket.GetName() && currentAct == 0)
+                {
+                    currentAct = 1;
+                    valid = true;
+                }
+                else if ("CROP" == disket.GetName() && currentAct == 1)
+                {
+                    currentAct = 2;
+                    valid = true;
+                }
+                else
+                {
+                    conversation.text = "<align=center><b>\n\n\n\n\n\nInsert a valid disket</b><align=justified>";
+                    disketPlugged = true;
+                    ret = false;
+                }
+
+                if (valid)
+                {
+                    conversation.text = "";
+                    script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
+                    ContinueStory();
+                    disketPlugged = true;
+                    disketValid = true;
+                    
+                    break;
+                }
+            }
+            else
+            {
+                conversation.text = "<align=center><b>\n\n\n\n\n\nInsert a valid disket</b><align=justified>";
+                ret = false;
             }
         }
 
@@ -108,17 +147,26 @@ public class ConversationManager : MonoBehaviour
     public void DisketUnplugged()
     {
         disketPlugged = false;
+        disketValid = false;
         conversation.text = "";
+        currentAct = 0;
 
         foreach (GameObject choice in choices)
         {
             choice.SetActive(false);
         }
+
+        foreach (TextMeshProUGUI choice in choicesText)
+        {
+            choice.text = "";
+        }
+
+        buttons.ClearChoices();
     }
 
     private void Update()
     {
-        if (disketPlugged)
+        if (disketValid)
         {
             if (charIndex != 0)
             {
@@ -145,6 +193,7 @@ public class ConversationManager : MonoBehaviour
         if (script.canContinue)
         {
             newText = script.Continue();
+            HandleTags(script.currentTags);
             AddText(newText);
             AddTextToLog();
         }
@@ -233,7 +282,7 @@ public class ConversationManager : MonoBehaviour
     {
         bool ret = false;
 
-        if (disketPlugged && script != null)
+        if (disketValid && script != null)
         {
             if (script.currentChoices.Count > 0 && charIndex == 0)
             {
@@ -248,7 +297,7 @@ public class ConversationManager : MonoBehaviour
     {
         int number = 0;
         
-        if (disketPlugged && script != null)
+        if (disketValid && script != null)
         {
             number = numberOfChoices;
         }
@@ -258,7 +307,7 @@ public class ConversationManager : MonoBehaviour
 
     public void ShowLog()
     {
-        if (disketPlugged && script != null)
+        if (disketValid && script != null)
         {
             CursorManager.GetInstance().HideCursor();
 
@@ -355,5 +404,59 @@ public class ConversationManager : MonoBehaviour
     private void AddTextToLog()
     {
         log.text += newText;
+    }
+
+    private void HandleTags(List<string> tags)
+    {
+        if (tags.Count > 0)
+        {
+            foreach (string tag in tags)
+            {
+                string[] splitTag = tag.Split(':');
+
+                if (splitTag.Length != 2)
+                {
+                    Debug.LogError("Incorrect tag: " + tag);
+                }
+
+                string tagKey = splitTag[0].Trim();
+                string tagValue = splitTag[1].Trim();
+
+                if (tagKey == "Speaker")
+                {
+                    switch (tagValue)
+                    {
+                        case PLAYER_TAG:
+                            conversation.color = Color.black;
+                            break;
+                        case BROKEN_TAG:
+                            conversation.color = Color.magenta;
+                            break;
+                        case CREATE_TAG:
+                            conversation.color = Color.yellow;
+                            break;
+                        case MENTOR_TAG:
+                            conversation.color = Color.green;
+                            break;
+                        case REBEL_TAG:
+                            conversation.color = Color.red;
+                            break;
+                        case WARRIOR_TAG:
+                            conversation.color = Color.blue;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Incorrect tag key: " + tagKey);
+                }
+            }
+        }
+        else
+        {
+            conversation.color = Color.black;
+        }
     }
 }
