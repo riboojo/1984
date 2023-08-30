@@ -227,5 +227,6 @@ public class ButtonManager : MonoBehaviour
         buttonsBacks[1].enabled = false;
         buttonsBacks[2].enabled = false;
         buttonsBacks[3].enabled = false;
+        SetCursorDefault();
     }
 }

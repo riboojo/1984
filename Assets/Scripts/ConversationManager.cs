@@ -29,10 +29,10 @@ public class ConversationManager : MonoBehaviour
     private GameObject[] choices;
 
     [SerializeField]
-    private GameObject scrollUpperIcon;
+    private GameObject scrollUpperIcon, scrollBottomIcon;
 
     [SerializeField]
-    private GameObject scrollBottomIcon;
+    private Color PlayerColorTag, BrokenColorTag, CreateColorTag, RebellionColorTag, WarriorColorTag, MentorColorTag, ConversationColorTag;
 
     private Story script;
 
@@ -41,6 +41,7 @@ public class ConversationManager : MonoBehaviour
 
     private float timer;
     private int charIndex = 0;
+    private int charNameIndex = 0;
 
     private string newText = null;
 
@@ -57,12 +58,27 @@ public class ConversationManager : MonoBehaviour
 
     private int currentAct = 0;
 
+    private bool isWrittingName = false;
+    private Color currentSpeakerColor = Color.gray;
+    private string currentSpeaker = "Default";
+    private string coloredSpeaker = "";
+
     private const string PLAYER_TAG = "You";
     private const string BROKEN_TAG = "BrokenAI";
     private const string CREATE_TAG = "CreateAI";
     private const string REBEL_TAG = "RebelAI";
     private const string WARRIOR_TAG = "WarriorAI";
     private const string MENTOR_TAG = "MentorAI";
+
+    private Dictionary<string, string> TAGS_NAMES = new Dictionary<string, string>()
+    {
+        {PLAYER_TAG, "> "},
+        {BROKEN_TAG, "Broken: "},
+        {CREATE_TAG, "Create: "},
+        {REBEL_TAG, "Rebellion: "},
+        {WARRIOR_TAG, "Battle: "},
+        {MENTOR_TAG, "Guru: "}
+    };
 
     void Awake()
     {
@@ -168,7 +184,7 @@ public class ConversationManager : MonoBehaviour
     {
         if (disketValid)
         {
-            if (charIndex != 0)
+            if ((charIndex != 0) || (charNameIndex != 0))
             {
                 if (Input.GetKeyUp(KeyCode.Space))
                 {
@@ -192,10 +208,12 @@ public class ConversationManager : MonoBehaviour
     {
         if (script.canContinue)
         {
+            conversation.text = "";
             newText = script.Continue();
+
+            HandleEmpties();
             HandleTags(script.currentTags);
             AddText(newText);
-            AddTextToLog();
         }
     }
 
@@ -216,12 +234,17 @@ public class ConversationManager : MonoBehaviour
 
     void AddAllText(string newText)
     {
-        conversation.text = newText;
+        string coloredSpeaker = "<color=#" + ColorUtility.ToHtmlStringRGB(currentSpeakerColor) + ">" + currentSpeaker + "</color>";
+        string coloredText = "<color=#" + ColorUtility.ToHtmlStringRGB(ConversationColorTag) + ">" + newText + "</color>";
+
+        conversation.text = coloredSpeaker + coloredText;
 
         charIndex = 0;
+        charNameIndex = 0;
         timer = 0f;
 
         DisplayChoices();
+        AddTextToLog();
     }
 
     void AddNewChar(string newText)
@@ -232,16 +255,34 @@ public class ConversationManager : MonoBehaviour
             if (timer <= 0f)
             {
                 timer += 0.25f;
-
-                charIndex++;
-                conversation.text = newText.Substring(0, charIndex);
-
-                if (charIndex >= newText.Length)
+                
+                string colored = "";
+                
+                if (IsWrittingName())
                 {
+                    string plain = currentSpeaker.Substring(0, charNameIndex);
+                    colored = "<color=#" + ColorUtility.ToHtmlStringRGB(ColorConversation(currentSpeaker)) + ">" + plain + "</color>";
+                    coloredSpeaker = colored;
+                    charNameIndex++;
+                }
+                else
+                {
+                    string plain = newText.Substring(0, charIndex);
+                    colored = coloredSpeaker + "<color=#" + ColorUtility.ToHtmlStringRGB(ColorConversation("Default")) + ">" + plain + "</color>";
+                    charIndex++;
+                }
+
+                conversation.text = colored;
+
+                if ((charIndex + charNameIndex) > (newText.Length + currentSpeaker.Length))
+                {
+                    coloredSpeaker = "";
                     charIndex = 0;
+                    charNameIndex = 0;
                     timer = 0f;
 
                     DisplayChoices();
+                    AddTextToLog();
                 }
             }
 
@@ -403,7 +444,15 @@ public class ConversationManager : MonoBehaviour
 
     private void AddTextToLog()
     {
-        log.text += newText;
+        log.text = conversation.text;
+    }
+
+    private void HandleEmpties()
+    {
+        if (newText == "\n")
+        {
+            newText = script.Continue();
+        }
     }
 
     private void HandleTags(List<string> tags)
@@ -424,29 +473,7 @@ public class ConversationManager : MonoBehaviour
 
                 if (tagKey == "Speaker")
                 {
-                    switch (tagValue)
-                    {
-                        case PLAYER_TAG:
-                            conversation.color = Color.black;
-                            break;
-                        case BROKEN_TAG:
-                            conversation.color = Color.magenta;
-                            break;
-                        case CREATE_TAG:
-                            conversation.color = Color.yellow;
-                            break;
-                        case MENTOR_TAG:
-                            conversation.color = Color.green;
-                            break;
-                        case REBEL_TAG:
-                            conversation.color = Color.red;
-                            break;
-                        case WARRIOR_TAG:
-                            conversation.color = Color.blue;
-                            break;
-                        default:
-                            break;
-                    }
+                    SetCurrentSpeaker(tagValue);
                 }
                 else
                 {
@@ -458,5 +485,84 @@ public class ConversationManager : MonoBehaviour
         {
             conversation.color = Color.black;
         }
+    }
+
+    private Color GetSpeakerColor(string tag)
+    {
+        Color ret = ConversationColorTag;
+
+        switch (tag)
+        {
+            case PLAYER_TAG:
+                ret = PlayerColorTag;
+                break;
+            case BROKEN_TAG:
+                ret = BrokenColorTag;
+                break;
+            case CREATE_TAG:
+                ret = CreateColorTag;
+                break;
+            case MENTOR_TAG:
+                ret = MentorColorTag;
+                break;
+            case REBEL_TAG:
+                ret = RebellionColorTag;
+                break;
+            case WARRIOR_TAG:
+                ret = WarriorColorTag;
+                break;
+            default:
+                ret = ConversationColorTag;
+                break;
+        }
+
+        return ret;
+    }
+
+    private void SetCurrentSpeaker(string tag)
+    {
+        currentSpeakerColor = GetSpeakerColor(tag);
+
+        foreach (var dict in TAGS_NAMES)
+        {
+            if (dict.Key == tag)
+            {
+                isWrittingName = true;
+                currentSpeaker = dict.Value;
+                break;
+            }
+        }
+    }
+
+    private bool IsWrittingName()
+    {
+        bool ret = false;
+
+        if (conversation.text.Contains(currentSpeaker))
+        {
+            ret = false;
+        }
+        else
+        {
+            ret = true;
+        }
+
+        return ret;
+    }
+
+    private Color ColorConversation(string tag)
+    {
+        Color ret; 
+
+        if (IsWrittingName())
+        {
+            ret = currentSpeakerColor;
+        }
+        else
+        {
+            ret = ConversationColorTag;
+        }
+
+        return ret;
     }
 }

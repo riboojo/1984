@@ -1087,7 +1087,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 23.19, y: -0.214, z: -0.044}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 5, y: -44}
+  m_AnchoredPosition: {x: 5, y: -44.000015}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &72816161
@@ -6923,8 +6923,8 @@ MonoBehaviour:
   - {fileID: 1899017451}
   inkFiles:
   - {fileID: 4900000, guid: ad57e1407cab129459ec696c3fe709b8, type: 3}
+  - {fileID: 4900000, guid: ac55fbdd7049da0469ed72fec5910620, type: 3}
   - {fileID: 4900000, guid: c771f5522d49088439786c233d36b302, type: 3}
-  - {fileID: 4900000, guid: f4bbf8023365265489f74bcd6a0fd195, type: 3}
   choices:
   - {fileID: 872731680}
   - {fileID: 27703068}
@@ -6932,6 +6932,13 @@ MonoBehaviour:
   - {fileID: 675046878}
   scrollUpperIcon: {fileID: 1758597861}
   scrollBottomIcon: {fileID: 1838406240}
+  PlayerColorTag: {r: 0.1792453, g: 0.07987298, b: 0.026041292, a: 1}
+  BrokenColorTag: {r: 0.754717, g: 0.42554528, b: 0.08116763, a: 1}
+  CreateColorTag: {r: 0.1457814, g: 0.4245283, b: 0.36418104, a: 1}
+  RebellionColorTag: {r: 0.6313726, g: 0.16078432, b: 0.14117648, a: 1}
+  WarriorColorTag: {r: 0.23239586, g: 0.4528302, b: 0.28061587, a: 1}
+  MentorColorTag: {r: 0.70066756, g: 0.7075472, b: 0.23629402, a: 1}
+  ConversationColorTag: {r: 0.3584906, g: 0.28521422, b: 0.17383412, a: 1}
 --- !u!4 &797122386 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2357232857223821614, guid: c2f46bbe63ed2b84394d5f741e5b2730, type: 3}

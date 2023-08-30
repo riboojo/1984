@@ -30,7 +30,10 @@ public class MainGameManager : MonoBehaviour
     }
 
     private GameState state = GameState.Default;
-    
+
+    private bool screenFocused = false;
+    private bool shiftPressed = false;
+
     private void Awake()
     {
         if ((instance != null) && (instance != this))
@@ -117,7 +120,18 @@ public class MainGameManager : MonoBehaviour
 
     private void UpdateScreenStatus()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !shiftPressed)
+        {
+            shiftPressed = true;
+            screenFocused = !screenFocused;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            shiftPressed = false;
+        }
+
+        if (screenFocused)
         {
             ActivateScreen();
         }
