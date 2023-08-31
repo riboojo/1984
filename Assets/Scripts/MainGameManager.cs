@@ -7,19 +7,13 @@ using UnityEngine.UI;
 public class MainGameManager : MonoBehaviour
 {
     private static MainGameManager instance;
+    
+    [SerializeField]
+    private Camera mainCamera, menuCamera;
 
     [SerializeField]
-    private GameObject blur;
-
-    [SerializeField]
-    private GameObject guides;
-
-    [SerializeField]
-    private Camera mainCamera;
-
-    [SerializeField]
-    GameObject UIText_Guides;
-
+    GameObject menuText, menuBack;
+    
     public enum GameState
     {
         Intro = 0,
@@ -29,10 +23,12 @@ public class MainGameManager : MonoBehaviour
         Default
     }
 
-    private GameState state = GameState.Default;
+    private GameState state = GameState.Intro;
 
     private bool screenFocused = false;
     private bool shiftPressed = false;
+
+    private bool mouseClicked = false;
 
     private void Awake()
     {
@@ -93,7 +89,34 @@ public class MainGameManager : MonoBehaviour
 
     private void StateIntro()
     {
+        if (!Input.GetMouseButton(0) && mouseClicked)
+        {
+            mouseClicked = false;
+            StartGamePressed();
+        }
+        else
+        {
+            menuCamera.enabled = true;
+            mainCamera.enabled = false;
+            menuText.SetActive(true);
+            menuBack.SetActive(false);
 
+            Ray ray = menuCamera.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit currentHit;
+            if (Physics.Raycast(ray, out currentHit))
+            {
+                if (currentHit.transform.tag == "UISelectable")
+                {
+                    menuBack.SetActive(true);
+
+                    if (Input.GetMouseButton(0))
+                    {
+                        mouseClicked = true;
+                    }
+                }
+            }
+        }
     }
 
     private void StateLookingAround()
@@ -143,9 +166,6 @@ public class MainGameManager : MonoBehaviour
 
     private void ActivateScreen()
     {
-        //blur.SetActive(true);
-        //guides.SetActive(false);
-        UIText_Guides.GetComponent<TextMeshProUGUI>().text = "Tip: Press Space to continue";
         CursorManager.GetInstance().SetCursorStatus(true);
 
         mainCamera.GetComponent<CameraMovement>().CenterCamera();
@@ -154,9 +174,6 @@ public class MainGameManager : MonoBehaviour
 
     private void DeactivateScreen()
     {
-        //blur.SetActive(false);
-        //guides.SetActive(true);
-        UIText_Guides.GetComponent<TextMeshProUGUI>().text = "Tip: Hold Shift to focus";
         CursorManager.GetInstance().SetCursorStatus(false);
 
         mainCamera.GetComponent<CameraMovement>().MoveCamera();
@@ -175,4 +192,14 @@ public class MainGameManager : MonoBehaviour
         }
     }
 
+
+    private void StartGamePressed()
+    {
+        mainCamera.enabled = true;
+        menuCamera.enabled = false;
+        menuText.SetActive(false);
+        menuBack.SetActive(false);
+
+        SetState(GameState.Default);
+    }
 }

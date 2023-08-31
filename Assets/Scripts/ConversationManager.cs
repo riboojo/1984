@@ -444,7 +444,7 @@ public class ConversationManager : MonoBehaviour
 
     private void AddTextToLog()
     {
-        log.text = conversation.text;
+        log.text += conversation.text;
     }
 
     private void HandleEmpties()
