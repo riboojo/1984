@@ -7496,7 +7496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disketName: 
+  disketName: EmptySpace
   UIText: {fileID: 863152979}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}
@@ -11376,7 +11376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1334687303}
   m_LocalRotation: {x: -0, y: 0.5038157, z: -0, w: 0.8638112}
-  m_LocalPosition: {x: 1.9090002, y: 12.374, z: -0.997}
+  m_LocalPosition: {x: 2.162, y: 12.201, z: -0.997}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 822117749}
@@ -11394,10 +11394,10 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 2.67
-  m_Range: 1.65
-  m_SpotAngle: 63.50855
-  m_InnerSpotAngle: 24.415134
+  m_Intensity: 2.04
+  m_Range: 1.92
+  m_SpotAngle: 56.452045
+  m_InnerSpotAngle: 17.358631
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
@@ -15712,7 +15712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disketName: 
+  disketName: CROP
   UIText: {fileID: 1379947021}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}
@@ -20695,7 +20695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disketName: 
+  disketName: EmptySpace
   UIText: {fileID: 628469705}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}
