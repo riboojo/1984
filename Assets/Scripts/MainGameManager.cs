@@ -12,10 +12,13 @@ public class MainGameManager : MonoBehaviour
     private Camera mainCamera, menuCamera;
 
     [SerializeField]
-    GameObject menuText, menuBack;
+    GameObject menuBack;
 
     [SerializeField]
     Light menuLight;
+
+    [SerializeField]
+    NotepadBehavior notepad;
 
     public enum GameState
     {
@@ -107,7 +110,6 @@ public class MainGameManager : MonoBehaviour
             menuLight.enabled = true;
             menuCamera.enabled = true;
             mainCamera.enabled = false;
-            menuText.SetActive(true);
             menuBack.SetActive(false);
 
             Ray ray = menuCamera.ScreenPointToRay(Input.mousePosition);
@@ -207,7 +209,6 @@ public class MainGameManager : MonoBehaviour
         menuLight.enabled = false;
         mainCamera.enabled = true;
         menuCamera.enabled = false;
-        menuText.SetActive(false);
         menuBack.SetActive(false);
 
         SetState(GameState.Default);
@@ -222,7 +223,9 @@ public class MainGameManager : MonoBehaviour
         if (Vector3.Distance(menuCamera.transform.position, mainCamera.transform.position) < 0.01f)
         {
             movingCamera = false;
+            notepad.ShowNotepad();
             StartGamePressed();
+            //mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
         }
     }
 }

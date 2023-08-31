@@ -11,11 +11,9 @@ public class NotepadBehavior : MonoBehaviour
 
     [SerializeField]
     AudioSource notepadAudio;
-    
+ 
     private void Start()
     {
-        UIText.SetActive(false);
-        objectShown = true;
         notepadAudio = GetComponent<AudioSource>();
     }
 
@@ -37,10 +35,7 @@ public class NotepadBehavior : MonoBehaviour
     {
         bool ret = true;
 
-        notepadAudio.Play();
-        UIText.SetActive(false);
-        GetComponent<Animator>().SetTrigger("show");
-        objectShown = true;
+        ShowNotepad();
 
         return ret;
     }
@@ -56,5 +51,13 @@ public class NotepadBehavior : MonoBehaviour
         {
             UIText.SetActive(false);
         }
+    }
+
+    public void ShowNotepad()
+    {
+        notepadAudio.Play();
+        UIText.SetActive(false);
+        GetComponent<Animator>().SetTrigger("show");
+        objectShown = true;
     }
 }

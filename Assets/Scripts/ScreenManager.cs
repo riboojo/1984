@@ -40,16 +40,16 @@ public class ScreenManager : MonoBehaviour
         {
             if (!isNoise)
             {
-                led.SetTrigger("green");
+                //led.SetTrigger("green");
             }
             else
             {
-                led.SetTrigger("flash");
+                //led.SetTrigger("flash");
             }
         }
         else
         {
-            led.SetTrigger("red");
+            //led.SetTrigger("red");
         }
     }
 
@@ -67,8 +67,8 @@ public class ScreenManager : MonoBehaviour
     public void TurnOffScreen()
     {
         isOn = false;
-        ClearNoise();
         GetComponentInParent<Animator>().SetTrigger("off");
+        ClearNoise();
     }
 
     public void SetNoise()

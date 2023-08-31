@@ -16,6 +16,11 @@ public class CameraMovement : MonoBehaviour
 
     public float speed = 200f;
 
+    private void Start()
+    {
+        //CenterCamera();
+    }
+
     public void MoveCamera()
     {
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * speed;

@@ -7,6 +7,12 @@ public class MainSwitchBehavior : MonoBehaviour
     [SerializeField]
     GameObject UIText;
 
+    [SerializeField]
+    Material off, on;
+
+    [SerializeField]
+    MeshRenderer led;
+
     bool switchOn = false;
 
     AudioSource switchAudio;
@@ -20,19 +26,13 @@ public class MainSwitchBehavior : MonoBehaviour
     {
         switchAudio.Play();
 
-        if (switchOn)
+        if (!switchOn)
         {
-            ScreenManager.GetInstance().TurnOffScreen();
-            GetComponentInParent<Animator>().SetTrigger("off");
-            switchOn = false;
+            TurnOn();
         }
         else
         {
-            GetComponentInParent<Animator>().SetTrigger("on");
-            ScreenManager.GetInstance().TurnOnScreen();
-            switchOn = true;
-
-            CheckNewDisket();
+            TurnOff();
         }
     }
 
@@ -57,12 +57,23 @@ public class MainSwitchBehavior : MonoBehaviour
         }
     }
 
+    public void TurnOn()
+    {
+        GetComponentInParent<Animator>().SetTrigger("on");
+        led.material = on;
+        switchOn = true;
+
+        CheckNewDisket();
+        ScreenManager.GetInstance().TurnOnScreen();
+    }
+
     public void TurnOff()
     {
-        ScreenManager.GetInstance().ClearNoise();
-        ScreenManager.GetInstance().TurnOffScreen();
         GetComponentInParent<Animator>().SetTrigger("off");
+        led.material = off;
         switchOn = false;
+
+        ScreenManager.GetInstance().TurnOffScreen();
     }
 
     public void CheckNewDisket()
@@ -73,7 +84,7 @@ public class MainSwitchBehavior : MonoBehaviour
         }
         else
         {
-            ScreenManager.GetInstance().ClearNoise();
+            //ScreenManager.GetInstance().ClearNoise();
         }
     }
 }

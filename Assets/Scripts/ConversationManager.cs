@@ -447,6 +447,11 @@ public class ConversationManager : MonoBehaviour
         {
             newText = script.Continue();
         }
+
+        if (newText.Contains("\n"))
+        {
+            newText.Remove(newText.Length - 2, 2);
+        }
     }
 
     private void HandleTags(List<string> tags)
