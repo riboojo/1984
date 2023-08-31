@@ -13,7 +13,10 @@ public class MainGameManager : MonoBehaviour
 
     [SerializeField]
     GameObject menuText, menuBack;
-    
+
+    [SerializeField]
+    Light menuLight;
+
     public enum GameState
     {
         Intro = 0,
@@ -29,6 +32,7 @@ public class MainGameManager : MonoBehaviour
     private bool shiftPressed = false;
 
     private bool mouseClicked = false;
+    private bool movingCamera = false;
 
     private void Awake()
     {
@@ -89,13 +93,18 @@ public class MainGameManager : MonoBehaviour
 
     private void StateIntro()
     {
-        if (!Input.GetMouseButton(0) && mouseClicked)
+        if (movingCamera)
         {
+            UpdateMenuCameraPosition();
+        }
+        else if (!Input.GetMouseButton(0) && mouseClicked)
+        {
+            movingCamera = true;
             mouseClicked = false;
-            StartGamePressed();
         }
         else
         {
+            menuLight.enabled = true;
             menuCamera.enabled = true;
             mainCamera.enabled = false;
             menuText.SetActive(true);
@@ -195,11 +204,25 @@ public class MainGameManager : MonoBehaviour
 
     private void StartGamePressed()
     {
+        menuLight.enabled = false;
         mainCamera.enabled = true;
         menuCamera.enabled = false;
         menuText.SetActive(false);
         menuBack.SetActive(false);
 
         SetState(GameState.Default);
+    }
+
+    private void UpdateMenuCameraPosition()
+    {
+        float step = 0.75f * Time.deltaTime;
+        menuCamera.transform.position = Vector3.MoveTowards(menuCamera.transform.position, mainCamera.transform.position, step);
+        menuCamera.transform.rotation = Quaternion.RotateTowards(menuCamera.transform.rotation, mainCamera.transform.rotation, 0.1f);
+        
+        if (Vector3.Distance(menuCamera.transform.position, mainCamera.transform.position) < 0.01f)
+        {
+            movingCamera = false;
+            StartGamePressed();
+        }
     }
 }

@@ -9,16 +9,16 @@ public class MainSwitchBehavior : MonoBehaviour
 
     bool switchOn = false;
 
-    AudioSource audio;
+    AudioSource switchAudio;
 
     private void Start()
     {
-        audio = GetComponent<AudioSource>();
+        switchAudio = GetComponent<AudioSource>();
     }
 
     public void ObjectSelected()
     {
-        audio.Play();
+        switchAudio.Play();
 
         if (switchOn)
         {

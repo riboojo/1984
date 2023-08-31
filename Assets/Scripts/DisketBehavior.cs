@@ -5,7 +5,7 @@ using UnityEngine;
 public class DisketBehavior : MonoBehaviour
 {
     [SerializeField]
-    string name;
+    string disketName;
 
     [SerializeField]
     GameObject UIText;
@@ -19,11 +19,11 @@ public class DisketBehavior : MonoBehaviour
     bool objectShown = false;
     bool objectPlugged = false;
 
-    AudioSource audio;
+    AudioSource disketAudio;
 
     private void Start()
     {
-        audio = GetComponent<AudioSource>();
+        disketAudio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -32,8 +32,8 @@ public class DisketBehavior : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                audio.clip = show;
-                audio.Play();
+                disketAudio.clip = show;
+                disketAudio.Play();
 
                 GetComponent<Animator>().SetTrigger("hide");
                 SelectableManager.GetInstance().ObjectReleased();
@@ -42,8 +42,8 @@ public class DisketBehavior : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                audio.clip = insert;
-                audio.Play();
+                disketAudio.clip = insert;
+                disketAudio.Play();
 
                 GetComponent<Animator>().SetTrigger("play");
                 SelectableManager.GetInstance().ObjectReleased();
@@ -63,8 +63,8 @@ public class DisketBehavior : MonoBehaviour
 
         if (!objectPlugged)
         {
-            audio.clip = show;
-            audio.Play();
+            disketAudio.clip = show;
+            disketAudio.Play();
 
             UIText.SetActive(false);
             GetComponent<Animator>().SetTrigger("show");
@@ -107,7 +107,7 @@ public class DisketBehavior : MonoBehaviour
 
     public string GetName()
     {
-        return name;
+        return disketName;
     }
 
     private void CheckScreen()

@@ -15,7 +15,7 @@ public class ScreenManager : MonoBehaviour
     private bool isOn;
     private bool isNoise;
 
-    AudioSource audio;
+    AudioSource screenAudio;
 
     Color black = Color.black;
     Color transparent = new Color(0f,0f,0f,125f);
@@ -31,7 +31,7 @@ public class ScreenManager : MonoBehaviour
 
     private void Start()
     {
-        audio = GetComponent<AudioSource>();
+        screenAudio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -76,7 +76,7 @@ public class ScreenManager : MonoBehaviour
         isNoise = true;
         noise.SetActive(true);
         GetComponentInParent<Animator>().SetBool("noise", true);
-        audio.Play();
+        screenAudio.Play();
     }
 
     public void ClearNoise()
@@ -84,7 +84,7 @@ public class ScreenManager : MonoBehaviour
         isNoise = false;
         noise.SetActive(false);
         GetComponentInParent<Animator>().SetBool("noise", false);
-        audio.Stop();
+        screenAudio.Stop();
     }
 
     public bool IsScreenOn()

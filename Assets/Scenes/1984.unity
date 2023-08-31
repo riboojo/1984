@@ -2651,6 +2651,7 @@ MonoBehaviour:
   menuCamera: {fileID: 1434508284}
   menuText: {fileID: 132581319}
   menuBack: {fileID: 2073836870}
+  menuLight: {fileID: 1334687305}
 --- !u!4 &268782771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7487548722229914460, guid: a2790bb3cfe12e041a5efc49f6a7324b, type: 3}
@@ -7495,7 +7496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: EmptySpace
+  disketName: 
   UIText: {fileID: 863152979}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}
@@ -10791,7 +10792,7 @@ Camera:
     height: 1
   near clip plane: 0.05
   far clip plane: 1000
-  field of view: 67.380135
+  field of view: 56.84314
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -10816,13 +10817,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297650280}
-  m_LocalRotation: {x: -0.06975581, y: 0.00030436658, z: -0.0043526455, w: -0.9975546}
-  m_LocalPosition: {x: -10.979, y: 12.756999, z: -0.475}
+  m_LocalRotation: {x: 0.14522335, y: -0, z: -0, w: 0.98939896}
+  m_LocalPosition: {x: -10.987, y: 12.834, z: -0.648}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1288854082}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 8, y: 360, z: 0.5}
+  m_LocalEulerAnglesHint: {x: 16.7, y: 0, z: 0}
 --- !u!114 &1297650285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10862,7 +10863,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1297650280}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
   m_Name: 
@@ -12013,7 +12014,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1434508281}
   - component: {fileID: 1434508284}
-  - component: {fileID: 1434508283}
   - component: {fileID: 1434508282}
   m_Layer: 0
   m_Name: MenuCamera
@@ -12030,7 +12030,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1434508280}
   m_LocalRotation: {x: -0.098356776, y: -0.25351506, z: 0.03195777, w: -0.9617873}
-  m_LocalPosition: {x: -8.441, y: 12.218, z: -0.515}
+  m_LocalPosition: {x: -8.529, y: 12.218, z: -0.582}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1288854082}
@@ -12059,7 +12059,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -12069,14 +12069,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &1434508283
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1434508280}
-  m_Enabled: 1
 --- !u!20 &1434508284
 Camera:
   m_ObjectHideFlags: 0
@@ -12090,7 +12082,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -12100,9 +12092,9 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.05
   far clip plane: 1000
-  field of view: 60
+  field of view: 56.84314
   orthographic: 0
   orthographic size: 5
   m_Depth: 0
@@ -15720,7 +15712,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: CROP
+  disketName: 
   UIText: {fileID: 1379947021}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}
@@ -19566,7 +19558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIText: {fileID: 1558718219}
-  audio: {fileID: 0}
+  notepadAudio: {fileID: 0}
 --- !u!64 &4385693342566951482
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -20703,7 +20695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e77a63df3d67b4d9870092c8d2ccbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: EmptySpace
+  disketName: 
   UIText: {fileID: 628469705}
   show: {fileID: 8300000, guid: b3d8250f9a30e414ebd80487c7a443a0, type: 3}
   insert: {fileID: 8300000, guid: a6efbe87694e50c4da40d1b8d670b52e, type: 3}

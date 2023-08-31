@@ -35,8 +35,7 @@ public class ConversationManager : MonoBehaviour
     private Color PlayerColorTag, BrokenColorTag, CreateColorTag, RebellionColorTag, WarriorColorTag, MentorColorTag, ConversationColorTag;
 
     private Story script;
-
-    private bool disketPlugged = false;
+    
     private bool disketValid = false;
 
     private float timer;
@@ -50,15 +49,13 @@ public class ConversationManager : MonoBehaviour
     private bool spaceReleased = false;
 
     private int numberOfChoices = 0;
-    private int MAX_CHOICES = 4;
 
     private bool isLogShown = false;
     private bool isUpArrowPressed = false;
     private bool isDownArrowPressed = false;
 
     private int currentAct = 0;
-
-    private bool isWrittingName = false;
+    
     private Color currentSpeakerColor = Color.gray;
     private string currentSpeaker = "Default";
     private string coloredSpeaker = "";
@@ -135,7 +132,6 @@ public class ConversationManager : MonoBehaviour
                 else
                 {
                     conversation.text = "<align=center><b>\n\n\n\n\n\nInsert a valid disket</b><align=justified>";
-                    disketPlugged = true;
                     ret = false;
                 }
 
@@ -144,7 +140,6 @@ public class ConversationManager : MonoBehaviour
                     conversation.text = "";
                     script = new Story(inkFiles[Array.IndexOf(diskets, disket)].text);
                     ContinueStory();
-                    disketPlugged = true;
                     disketValid = true;
                     
                     break;
@@ -162,7 +157,6 @@ public class ConversationManager : MonoBehaviour
 
     public void DisketUnplugged()
     {
-        disketPlugged = false;
         disketValid = false;
         conversation.text = "";
         currentAct = 0;
@@ -527,7 +521,6 @@ public class ConversationManager : MonoBehaviour
         {
             if (dict.Key == tag)
             {
-                isWrittingName = true;
                 currentSpeaker = dict.Value;
                 break;
             }
