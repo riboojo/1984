@@ -22,19 +22,7 @@ public class EjectButtonBehavior : MonoBehaviour
 
     public void ObjectSelected()
     {
-        buttonAudio.Play();
-
-        UIText.SetActive(false);
-        GetComponentInParent<Animator>().SetTrigger("push");
-
-        foreach (DisketBehavior disket in diskets)
-        {
-            if (disket.IsPlugged())
-            {
-                disket.ObjectUnplugged();
-                mainSwitch.TurnOff();
-            }
-        }
+        EjectDisket();
     }
 
     public void ObjectHigligthed(bool higlighted)
@@ -47,6 +35,23 @@ public class EjectButtonBehavior : MonoBehaviour
         else
         {
             UIText.SetActive(false);
+        }
+    }
+
+    public void EjectDisket()
+    {
+        buttonAudio.Play();
+
+        UIText.SetActive(false);
+        GetComponentInParent<Animator>().SetTrigger("push");
+
+        foreach (DisketBehavior disket in diskets)
+        {
+            if (disket.IsPlugged())
+            {
+                disket.ObjectUnplugged();
+                mainSwitch.TurnOff();
+            }
         }
     }
 }

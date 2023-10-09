@@ -42,7 +42,7 @@ public class SelectableManager : MonoBehaviour
 
     void Update()
     {
-        if (!objectSelected)
+        if (!objectSelected && MainGameManager.GetInstance().GetState() == MainGameManager.GameState.Default)
         {
             CheckSelectables();
         }

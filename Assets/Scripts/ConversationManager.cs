@@ -478,7 +478,7 @@ public class ConversationManager : MonoBehaviour
                 else if (tag == "EndGame")
                 {
                     disketEnd = true;
-                    MainGameManager.GetInstance().ActEnd(MainGameManager.GameEnds.WalkAway);
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.WalkAway);
                 }
                 else
                 {

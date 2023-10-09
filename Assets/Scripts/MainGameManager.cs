@@ -7,18 +7,27 @@ using UnityEngine.UI;
 public class MainGameManager : MonoBehaviour
 {
     private static MainGameManager instance;
-    
+
     [SerializeField]
     private Camera mainCamera, menuCamera;
 
     [SerializeField]
-    GameObject menuBack;
+    private Animator menuAnim;
+
+    [SerializeField]
+    private MenuCameraController menuController;
 
     [SerializeField]
     Light menuLight;
 
     [SerializeField]
     NotepadBehavior notepad;
+
+    [SerializeField]
+    GameObject mainMenu;
+
+    [SerializeField]
+    EjectButtonBehavior ejectButton;
 
     public enum GameState
     {
@@ -39,8 +48,7 @@ public class MainGameManager : MonoBehaviour
 
     private bool screenFocused = false;
     private bool shiftPressed = false;
-
-    private bool mouseClicked = false;
+    
     private bool movingCameraToMain = false;
     private bool movingCameraToMenu = false;
 
@@ -113,33 +121,13 @@ public class MainGameManager : MonoBehaviour
         {
             EnableMenuCamera();
         }
-        else if (!Input.GetMouseButton(0) && mouseClicked)
-        {
-            EnableMainCamera();
-            mouseClicked = false;
-        }
         else
         {
+            CursorManager.GetInstance().SetCursorStatus(false);
+            mainMenu.SetActive(true);
             menuLight.enabled = true;
             menuCamera.enabled = true;
             mainCamera.enabled = false;
-            menuBack.SetActive(false);
-
-            Ray ray = menuCamera.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit currentHit;
-            if (Physics.Raycast(ray, out currentHit))
-            {
-                if (currentHit.transform.tag == "UISelectable")
-                {
-                    menuBack.SetActive(true);
-
-                    if (Input.GetMouseButton(0))
-                    {
-                        mouseClicked = true;
-                    }
-                }
-            }
         }
     }
 
@@ -216,44 +204,50 @@ public class MainGameManager : MonoBehaviour
         }
     }
 
-
-    private void StartGamePressed()
+    private void StartGame()
     {
         menuLight.enabled = false;
-        mainCamera.enabled = true;
         menuCamera.enabled = false;
-        menuBack.SetActive(false);
+        mainCamera.enabled = true;
+        mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
 
         SetState(GameState.Default);
     }
 
     private void EnableMainCamera()
     {
-        movingCameraToMain = true;
-        float step = 0.75f * Time.deltaTime;
-        menuCamera.transform.position = Vector3.MoveTowards(menuCamera.transform.position, mainCamera.transform.position, step);
-        menuCamera.transform.rotation = Quaternion.RotateTowards(menuCamera.transform.rotation, mainCamera.transform.rotation, 0.1f);
-        
-        if (Vector3.Distance(menuCamera.transform.position, mainCamera.transform.position) < 0.01f)
+        if (!movingCameraToMain)
+        {
+            movingCameraToMain = true;
+            mainMenu.SetActive(false);
+            menuAnim.SetTrigger("start");
+
+        }
+
+        if (menuController.IsAnimPlaying() == MenuCameraController.AnimState.Ended)
         {
             movingCameraToMain = false;
+            mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
             notepad.ShowNotepad();
-            StartGamePressed();
-            //mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
+            StartGame();
         }
+        else { /* Do nothing */ }
     }
 
     private void EnableMenuCamera()
     {
-        movingCameraToMenu = true;
-        float step = 0.75f * Time.deltaTime;
-        mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, menuCamera.transform.position, step);
-        mainCamera.transform.rotation = Quaternion.RotateTowards(mainCamera.transform.rotation, menuCamera.transform.rotation, 0.1f);
+        if (!movingCameraToMenu)
+        {
+            movingCameraToMenu = true;
+            mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
+            menuCamera.enabled = true;
+            mainCamera.enabled = false;
+            menuAnim.SetTrigger("end");
+        }
 
-        if (Vector3.Distance(mainCamera.transform.position, menuCamera.transform.position) < 0.01f)
+        if (menuController.IsAnimPlaying() == MenuCameraController.AnimState.Ended)
         {
             movingCameraToMenu = false;
-            //mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
         }
     }
 
@@ -267,9 +261,21 @@ public class MainGameManager : MonoBehaviour
         currentAct = act;
     }
 
-    public void ActEnd(GameEnds end)
+    public void EndGame(GameEnds end)
     {
+        SetCurrentAct(0);
+
+        ejectButton.EjectDisket();
+        shiftPressed = false;
+        screenFocused = false;
+        DeactivateScreen();
         EnableMenuCamera();
+
         SetState(GameState.Intro);
+    }
+
+    public void MenuStartGame()
+    {
+        EnableMainCamera();
     }
 }
