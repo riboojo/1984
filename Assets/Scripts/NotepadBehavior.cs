@@ -28,6 +28,12 @@ public class NotepadBehavior : MonoBehaviour
                 SelectableManager.GetInstance().ObjectReleased();
                 objectShown = false;
             }
+            else if (Input.GetKeyDown(KeyCode.E))
+            {
+                notepadAudio.Play();
+                GetComponent<Animator>().SetTrigger("turn");
+            }
+            else { /* Do nothiing */ }
         }
     }
 

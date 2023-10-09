@@ -50,11 +50,11 @@ public class ConversationManager : MonoBehaviour
 
     private int numberOfChoices = 0;
 
+    private bool disketEnd = false;
+
     private bool isLogShown = false;
     private bool isUpArrowPressed = false;
     private bool isDownArrowPressed = false;
-
-    private int currentAct = 0;
     
     private Color currentSpeakerColor = Color.gray;
     private string currentSpeaker = "Default";
@@ -66,6 +66,7 @@ public class ConversationManager : MonoBehaviour
     private const string REBEL_TAG = "RebelAI";
     private const string WARRIOR_TAG = "WarriorAI";
     private const string MENTOR_TAG = "MentorAI";
+    private const string CROP_TAG = "CROP";
 
     private Dictionary<string, string> TAGS_NAMES = new Dictionary<string, string>()
     {
@@ -74,7 +75,8 @@ public class ConversationManager : MonoBehaviour
         {CREATE_TAG, "Create: "},
         {REBEL_TAG, "Rebellion: "},
         {WARRIOR_TAG, "Battle: "},
-        {MENTOR_TAG, "Guru: "}
+        {MENTOR_TAG, "Guru: "},
+        {CROP_TAG, "C.R.O.P.: "}
     };
 
     void Awake()
@@ -119,14 +121,14 @@ public class ConversationManager : MonoBehaviour
                 log.pageToDisplay = 1;
                 ret = true;
 
-                if ("EmptySpace" == disket.GetName() && currentAct == 0)
+                if ("EmptySpace" == disket.GetName() && MainGameManager.GetInstance().GetCurrentAct() == 0)
                 {
-                    currentAct = 1;
+                    disketEnd = false;
                     valid = true;
                 }
-                else if ("CROP" == disket.GetName() && currentAct == 1)
+                else if ("CROP" == disket.GetName() && MainGameManager.GetInstance().GetCurrentAct() == 1)
                 {
-                    currentAct = 2;
+                    disketEnd = false;
                     valid = true;
                 }
                 else
@@ -159,7 +161,6 @@ public class ConversationManager : MonoBehaviour
     {
         disketValid = false;
         conversation.text = "";
-        currentAct = 0;
 
         foreach (GameObject choice in choices)
         {
@@ -171,6 +172,7 @@ public class ConversationManager : MonoBehaviour
             choice.text = "";
         }
 
+        disketEnd = true;
         buttons.ClearChoices();
     }
 
@@ -208,6 +210,14 @@ public class ConversationManager : MonoBehaviour
             HandleEmpties();
             HandleTags(script.currentTags);
             AddText(newText);
+        }
+        else
+        {
+            if (disketEnd)
+            {
+                ScreenManager.GetInstance().SetNoise();
+                conversation.text = "<align=center><b>\n\n\n\n\n\nInsert a valid disket</b><align=justified>";
+            }
         }
     }
 
@@ -460,23 +470,36 @@ public class ConversationManager : MonoBehaviour
         {
             foreach (string tag in tags)
             {
-                string[] splitTag = tag.Split(':');
-
-                if (splitTag.Length != 2)
+                if (tag == "EndAct")
                 {
-                    Debug.LogError("Incorrect tag: " + tag);
+                    disketEnd = true;
+                    ActFinished();
                 }
-
-                string tagKey = splitTag[0].Trim();
-                string tagValue = splitTag[1].Trim();
-
-                if (tagKey == "Speaker")
+                else if (tag == "EndGame")
                 {
-                    SetCurrentSpeaker(tagValue);
+                    disketEnd = true;
+                    MainGameManager.GetInstance().ActEnd(MainGameManager.GameEnds.WalkAway);
                 }
                 else
                 {
-                    Debug.LogError("Incorrect tag key: " + tagKey);
+                    string[] splitTag = tag.Split(':');
+
+                    if (splitTag.Length != 2)
+                    {
+                        Debug.LogError("Incorrect tag: " + tag);
+                    }
+
+                    string tagKey = splitTag[0].Trim();
+                    string tagValue = splitTag[1].Trim();
+
+                    if (tagKey == "Speaker")
+                    {
+                        SetCurrentSpeaker(tagValue);
+                    }
+                    else
+                    {
+                        Debug.LogError("Incorrect tag key: " + tagKey);
+                    }
                 }
             }
         }
@@ -510,6 +533,7 @@ public class ConversationManager : MonoBehaviour
             case WARRIOR_TAG:
                 ret = WarriorColorTag;
                 break;
+            case CROP_TAG:
             default:
                 ret = ConversationColorTag;
                 break;
@@ -562,5 +586,11 @@ public class ConversationManager : MonoBehaviour
         }
 
         return ret;
+    }
+
+    private void ActFinished()
+    {
+        int currentAct = MainGameManager.GetInstance().GetCurrentAct();
+        MainGameManager.GetInstance().SetCurrentAct(++currentAct);
     }
 }

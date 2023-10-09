@@ -29,13 +29,22 @@ public class MainGameManager : MonoBehaviour
         Default
     }
 
+    public enum GameEnds
+    {
+        WalkAway = 0,
+        Empty
+    }
+
     private GameState state = GameState.Intro;
 
     private bool screenFocused = false;
     private bool shiftPressed = false;
 
     private bool mouseClicked = false;
-    private bool movingCamera = false;
+    private bool movingCameraToMain = false;
+    private bool movingCameraToMenu = false;
+
+    private int currentAct = 0;
 
     private void Awake()
     {
@@ -96,13 +105,17 @@ public class MainGameManager : MonoBehaviour
 
     private void StateIntro()
     {
-        if (movingCamera)
+        if (movingCameraToMain)
         {
-            UpdateMenuCameraPosition();
+            EnableMainCamera();
+        }
+        else if (movingCameraToMenu)
+        {
+            EnableMenuCamera();
         }
         else if (!Input.GetMouseButton(0) && mouseClicked)
         {
-            movingCamera = true;
+            EnableMainCamera();
             mouseClicked = false;
         }
         else
@@ -214,18 +227,49 @@ public class MainGameManager : MonoBehaviour
         SetState(GameState.Default);
     }
 
-    private void UpdateMenuCameraPosition()
+    private void EnableMainCamera()
     {
+        movingCameraToMain = true;
         float step = 0.75f * Time.deltaTime;
         menuCamera.transform.position = Vector3.MoveTowards(menuCamera.transform.position, mainCamera.transform.position, step);
         menuCamera.transform.rotation = Quaternion.RotateTowards(menuCamera.transform.rotation, mainCamera.transform.rotation, 0.1f);
         
         if (Vector3.Distance(menuCamera.transform.position, mainCamera.transform.position) < 0.01f)
         {
-            movingCamera = false;
+            movingCameraToMain = false;
             notepad.ShowNotepad();
             StartGamePressed();
             //mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
         }
+    }
+
+    private void EnableMenuCamera()
+    {
+        movingCameraToMenu = true;
+        float step = 0.75f * Time.deltaTime;
+        mainCamera.transform.position = Vector3.MoveTowards(mainCamera.transform.position, menuCamera.transform.position, step);
+        mainCamera.transform.rotation = Quaternion.RotateTowards(mainCamera.transform.rotation, menuCamera.transform.rotation, 0.1f);
+
+        if (Vector3.Distance(mainCamera.transform.position, menuCamera.transform.position) < 0.01f)
+        {
+            movingCameraToMenu = false;
+            //mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
+        }
+    }
+
+    public int GetCurrentAct()
+    {
+        return currentAct;
+    }
+
+    public void SetCurrentAct(int act)
+    {
+        currentAct = act;
+    }
+
+    public void ActEnd(GameEnds end)
+    {
+        EnableMenuCamera();
+        SetState(GameState.Intro);
     }
 }
