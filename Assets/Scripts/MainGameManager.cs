@@ -16,10 +16,7 @@ public class MainGameManager : MonoBehaviour
 
     [SerializeField]
     private MenuCameraController menuController;
-
-    [SerializeField]
-    Light menuLight;
-
+    
     [SerializeField]
     NotepadBehavior notepad;
 
@@ -28,6 +25,12 @@ public class MainGameManager : MonoBehaviour
 
     [SerializeField]
     EjectButtonBehavior ejectButton;
+
+    [SerializeField]
+    Sprite[] endingImages;
+
+    [SerializeField]
+    GameObject[] endingHolders;
 
     public enum GameState
     {
@@ -41,18 +44,28 @@ public class MainGameManager : MonoBehaviour
     public enum GameEnds
     {
         WalkAway = 0,
-        Empty
+        Empty1,
+        Empty2,
+        Empty3
     }
 
     private GameState state = GameState.Intro;
 
     private bool screenFocused = false;
     private bool shiftPressed = false;
-    
+
     private bool movingCameraToMain = false;
     private bool movingCameraToMenu = false;
 
     private int currentAct = 0;
+
+    private Dictionary<GameEnds, bool> endings = new Dictionary<GameEnds, bool>()
+    {
+        { GameEnds.WalkAway, false },
+        { GameEnds.Empty1, false },
+        { GameEnds.Empty2, false },
+        { GameEnds.Empty3, false }
+    };
 
     private void Awake()
     {
@@ -125,7 +138,6 @@ public class MainGameManager : MonoBehaviour
         {
             CursorManager.GetInstance().SetCursorStatus(false);
             mainMenu.SetActive(true);
-            menuLight.enabled = true;
             menuCamera.enabled = true;
             mainCamera.enabled = false;
         }
@@ -206,7 +218,6 @@ public class MainGameManager : MonoBehaviour
 
     private void StartGame()
     {
-        menuLight.enabled = false;
         menuCamera.enabled = false;
         mainCamera.enabled = true;
         mainCamera.GetComponentInParent<CameraMovement>().CenterCamera();
@@ -221,7 +232,6 @@ public class MainGameManager : MonoBehaviour
             movingCameraToMain = true;
             mainMenu.SetActive(false);
             menuAnim.SetTrigger("start");
-
         }
 
         if (menuController.IsAnimPlaying() == MenuCameraController.AnimState.Ended)
@@ -247,7 +257,26 @@ public class MainGameManager : MonoBehaviour
 
         if (menuController.IsAnimPlaying() == MenuCameraController.AnimState.Ended)
         {
+            MenuUpdateEndings();
             movingCameraToMenu = false;
+        }
+    }
+
+    private void MenuUpdateEndings()
+    {
+        int i = 0;
+        foreach (var item in endings)
+        {
+            if (item.Value == false)
+            {
+                endingHolders[i].GetComponent<Image>().sprite = endingImages[0];
+            }
+            else
+            {
+                endingHolders[i].GetComponent<Image>().sprite = endingImages[i+1];
+            }
+
+            i++;
         }
     }
 
@@ -271,8 +300,11 @@ public class MainGameManager : MonoBehaviour
         DeactivateScreen();
         EnableMenuCamera();
 
+        endings[end] = true;
+
         SetState(GameState.Intro);
     }
+
 
     public void MenuStartGame()
     {
