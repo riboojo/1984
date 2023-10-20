@@ -32,6 +32,21 @@ public class MainGameManager : MonoBehaviour
     [SerializeField]
     GameObject[] endingHolders;
 
+    [SerializeField]
+    Animator sceneLights;
+
+    [SerializeField]
+    GameObject normalPC;
+
+    [SerializeField]
+    GameObject breakablePC;
+
+    [SerializeField]
+    Transform breakablePCPos;
+
+    [SerializeField]
+    AudioSource explotion;
+
     public enum GameState
     {
         Intro = 0,
@@ -44,9 +59,10 @@ public class MainGameManager : MonoBehaviour
     public enum GameEnds
     {
         WalkAway = 0,
-        Empty1,
-        Empty2,
-        Empty3
+        Warrior,
+        Creative,
+        Mentor,
+        Rebel
     }
 
     private GameState state = GameState.Intro;
@@ -62,9 +78,10 @@ public class MainGameManager : MonoBehaviour
     private Dictionary<GameEnds, bool> endings = new Dictionary<GameEnds, bool>()
     {
         { GameEnds.WalkAway, false },
-        { GameEnds.Empty1, false },
-        { GameEnds.Empty2, false },
-        { GameEnds.Empty3, false }
+        { GameEnds.Warrior, false },
+        { GameEnds.Creative, false },
+        { GameEnds.Mentor, false },
+        { GameEnds.Rebel, false }
     };
 
     private void Awake()
@@ -88,6 +105,7 @@ public class MainGameManager : MonoBehaviour
     void Update()
     {
         MainStateMachine();
+        TestEndings();
     }
 
     void MainStateMachine()
@@ -292,19 +310,79 @@ public class MainGameManager : MonoBehaviour
 
     public void EndGame(GameEnds end)
     {
-        SetCurrentAct(0);
+        switch (end)
+        {
+            case GameEnds.WalkAway:
+                PerformWalkAwayEnding();
+                break;
+            case GameEnds.Warrior:
+                PerformWarriorEnding();
+                break;
+            case GameEnds.Creative:
+                PerformCreativeEnding();
+                break;
+            case GameEnds.Mentor:
+                PerformMentorEnding();
+                break;
+            case GameEnds.Rebel:
+                PerformRebelEnding();
+                break;
+            default:
+                break;
+        }
 
+        endings[end] = true;
+
+        SetCurrentAct(0);
+        SetState(GameState.Intro);
+    }
+
+    private void PerformWalkAwayEnding()
+    {
         ejectButton.EjectDisket();
         shiftPressed = false;
         screenFocused = false;
         DeactivateScreen();
         EnableMenuCamera();
-
-        endings[end] = true;
-
-        SetState(GameState.Intro);
     }
 
+    private void PerformWarriorEnding()
+    {
+
+    }
+
+    private void PerformCreativeEnding()
+    {
+
+    }
+
+    private void PerformMentorEnding()
+    {
+        sceneLights.SetTrigger("ending");
+    }
+
+    private void PerformRebelEnding()
+    {
+        normalPC.SetActive(false);
+        GameObject breakable = Instantiate(breakablePC, breakablePCPos);
+
+        Breakable[] pieces = breakable.GetComponentsInChildren<Breakable>();
+
+        explotion.Play();
+
+        foreach (Breakable piece in pieces)
+        {
+            piece.CreateExplosion();
+        }
+    }
+
+    private void TestEndings()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PerformRebelEnding();
+        }
+    }
 
     public void MenuStartGame()
     {
