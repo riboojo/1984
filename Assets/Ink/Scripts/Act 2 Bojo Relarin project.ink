@@ -1,7 +1,4 @@
- VAR personaW = 0//public variable. accessible via other classes. for warrior. 
- VAR personaC = 0//variable for creative AI 
- VAR personaM= 0 //variable for mentor 
- VAR personaR = 0 //variable for Rebel
+INCLUDE globals.ink
  
  -> main2 //calls main class for act 2
  
