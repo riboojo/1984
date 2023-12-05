@@ -100,6 +100,16 @@ public class MainGameManager : MonoBehaviour
         { GameEnds.Secret, false }
     };
 
+    public void LoadData(Dictionary<MainGameManager.GameEnds, bool> data)
+    {
+        endings = data;
+    }
+
+    public void SaveData(ref Dictionary<MainGameManager.GameEnds, bool> data)
+    {
+        data = endings;
+    }
+
     private void Awake()
     {
         if ((instance != null) && (instance != this))
@@ -118,7 +128,12 @@ public class MainGameManager : MonoBehaviour
         return instance;
     }
 
-    void Update()
+    private void Start()
+    {
+        MenuUpdateEndings();
+    }
+
+    private void Update()
     {
         MainStateMachine();
         //TestEndings();
@@ -312,6 +327,11 @@ public class MainGameManager : MonoBehaviour
 
             i++;
         }
+    }
+
+    private void MenuLoadEndings()
+    {
+
     }
 
     public int GetCurrentAct()
