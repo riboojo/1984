@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -47,6 +48,12 @@ public class MainGameManager : MonoBehaviour
     [SerializeField]
     AudioSource explotion;
 
+    [SerializeField]
+    GameObject Act2Disket;
+
+    [SerializeField]
+    Material Act2DisketAv, Act2DisketUnav;
+
     public enum GameState
     {
         Intro = 0,
@@ -59,10 +66,18 @@ public class MainGameManager : MonoBehaviour
     public enum GameEnds
     {
         WalkAway = 0,
+        Rebel,
         Warrior,
         Creative,
         Mentor,
-        Rebel
+        Secret
+    }
+
+    public enum GameActs
+    {
+        Act1 = 0,
+        Act2,
+        Act3
     }
 
     private GameState state = GameState.Intro;
@@ -81,7 +96,8 @@ public class MainGameManager : MonoBehaviour
         { GameEnds.Warrior, false },
         { GameEnds.Creative, false },
         { GameEnds.Mentor, false },
-        { GameEnds.Rebel, false }
+        { GameEnds.Rebel, false },
+        { GameEnds.Secret, false }
     };
 
     private void Awake()
@@ -105,7 +121,7 @@ public class MainGameManager : MonoBehaviour
     void Update()
     {
         MainStateMachine();
-        TestEndings();
+        //TestEndings();
     }
 
     void MainStateMachine()
@@ -306,6 +322,15 @@ public class MainGameManager : MonoBehaviour
     public void SetCurrentAct(int act)
     {
         currentAct = act;
+
+        if ((int)GameActs.Act3 == currentAct)
+        {
+            Act2Disket.GetComponent<MeshRenderer>().material = Act2DisketAv;
+        }
+        else
+        {
+            Act2Disket.GetComponent<MeshRenderer>().material = Act2DisketUnav;
+        }
     }
 
     public void EndGame(GameEnds end)
@@ -348,17 +373,18 @@ public class MainGameManager : MonoBehaviour
 
     private void PerformWarriorEnding()
     {
-
+        PerformWalkAwayEnding();
     }
 
     private void PerformCreativeEnding()
     {
-
+        PerformWalkAwayEnding();
     }
 
     private void PerformMentorEnding()
     {
         sceneLights.SetTrigger("ending");
+        PerformWalkAwayEnding();
     }
 
     private void PerformRebelEnding()
@@ -374,6 +400,8 @@ public class MainGameManager : MonoBehaviour
         {
             piece.CreateExplosion();
         }
+
+        PerformWalkAwayEnding();
     }
 
     private void TestEndings()

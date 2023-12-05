@@ -228,31 +228,31 @@ WHAT SHOULD ONE BE MOST PROUD OF?#Speaker:CROP
             A useful tool in one’s repertoire to sell an idea of the soul but only if it remains true to that soul. #Speaker:CreateAI
             Force is much quicker. #Speaker:WarriorAI
             Charisma is far more useful than money or raw strength. #Speaker:MentorAI
-            People pleasing can only get you so far. #Speaker:RebelAI 
+            People pleasing can only get you so far. #Speaker:RebelAI #EndAct
             ~ personaM = personaM + 1
-            ->END
+            ->DONE
     
     *Brilliant Ideas. #Speaker:You
             ideas are great but only if you can convince others to follow them friend. #Speaker:MentorAI 
             Intelligent design leads to innovation and innovation outclasses everything. #Speaker:CreateAI
             Ideas serve the people. Not the other way around partner. #Speaker:RebelAI 
-            Only if it leads to a fight trooper. #Speaker:WarriorAI
+            Only if it leads to a fight trooper. #Speaker:WarriorAI #EndAct
             ~ personaC = personaC + 1
-            ->END
+            ->DONE
     
     *Changing the world for the better. #Speaker:You
             What more could you ask for? #Speaker:RebelAI
             Always a beautiful outcome but never the primary purpose. Simply a convenient side effect. #Speaker:CreateAI
             “Better” can mean a lot of things, ensure it includes us. #Speaker:MentorAI
-            If there’s no conflict, meaning crumbles. #Speaker:WarriorAI
+            If there’s no conflict, meaning crumbles. #Speaker:WarriorAI #EndAct
             ~ personaR = personaR + 1
-            ->END
+            ->DONE
     
     *Victory, with nothing else in my way. #Speaker:You
             The truest of accomplishments. Never is there, a greater purpose. #Speaker:WarriorAI
             Only if the people you serve are standing beside you.#Speaker:RebelAI 
             The drive of the universe never ceases in spite of short sighted ambition . The drive of creativity is infinite in your soul. Serve it. #Speaker:CreateAI
-            A fantastic ideal but unrealistic to reality. #Speaker:MentorAI
+            A fantastic ideal but unrealistic to reality. #Speaker:MentorAI #EndAct
             ~ personaW = personaW + 1
 
 
@@ -261,7 +261,7 @@ WHAT SHOULD ONE BE MOST PROUD OF?#Speaker:CROP
         {personaR}
         {personaC}
         {personaM}  //test codes to ensure each was added correclty. 
-    ->END
+        ->DONE
 
 //ISSUE: No matter what I do. a player could end up with a tie between two AI. Determine that in act 3 somehow? A showdown between the two to deterine ending? But we would have to build 6 showdowns? Meaning lots of work? 
 

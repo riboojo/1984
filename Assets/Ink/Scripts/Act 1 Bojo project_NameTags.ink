@@ -78,7 +78,7 @@
         ->DONE //this will finish Act 1 but not the entire game.
 
     
-    *   No, goodbye. (Walk away) #Speaker:You #EndGame
+    *   No, goodbye. (Walk away) #Speaker:You #EndGameA
         ->END //This is supposed to end the game entirely. Not sure if this will translate to Unity but it should end the game.
     
 // Code is clunky, calls each class in a linear fashion instead of relying on cleaner and more understandable class's to call in a certain order. Hopefully it won't be an issue as you won't have to recode it.

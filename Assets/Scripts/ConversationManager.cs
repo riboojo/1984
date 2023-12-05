@@ -131,6 +131,11 @@ public class ConversationManager : MonoBehaviour
                     disketEnd = false;
                     valid = true;
                 }
+                else if ("Unavailable" == disket.GetName() && MainGameManager.GetInstance().GetCurrentAct() == 2)
+                {
+                    disketEnd = false;
+                    valid = true;
+                }
                 else
                 {
                     conversation.text = "<align=center><b>\n\n\n\n\n\nInsert a valid disket</b><align=justified>";
@@ -475,10 +480,35 @@ public class ConversationManager : MonoBehaviour
                     disketEnd = true;
                     ActFinished();
                 }
-                else if (tag == "EndGame")
+                else if (tag == "EndGameA")
                 {
                     disketEnd = true;
                     MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.WalkAway);
+                }
+                else if (tag == "EndGameB")
+                {
+                    disketEnd = true;
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.Rebel);
+                }
+                else if (tag == "EndGameC")
+                {
+                    disketEnd = true;
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.Warrior);
+                }
+                else if (tag == "EndGameD")
+                {
+                    disketEnd = true;
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.Creative);
+                }
+                else if (tag == "EndGameE")
+                {
+                    disketEnd = true;
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.Mentor);
+                }
+                else if (tag == "EndGameF")
+                {
+                    disketEnd = true;
+                    MainGameManager.GetInstance().EndGame(MainGameManager.GameEnds.Secret);
                 }
                 else
                 {
